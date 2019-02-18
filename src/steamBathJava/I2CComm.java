@@ -9,12 +9,12 @@ import com.pi4j.io.i2c.I2CFactory;
 import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
 public class I2CComm {
-    public static final int PRO_MINI_1 = 1;
-    public static final int PRO_MINI_2 = 2;
+    public static final int PRO_MINI_1 = 0;
+    public static final int PRO_MINI_2 = 1;
 
 
 
-    public static final byte I2CCMD_ACK = 0x0;
+    public static final byte I2CCMD_ACK = (byte)0xFF;
     public static final byte I2CCMD_MASTER_START = 0x1;
     public static final byte I2CCMD_GET = 0x2;
     public static final byte I2CCMD_SET = 0x3;
@@ -56,7 +56,7 @@ public class I2CComm {
 				0x0A  //spare 
 			},	
 			{
-				0x08, 
+				0x08, // BUS Address
 				0x01, // valve water IN A 
 				0x02, // valve water IN B
 				0x03, // valve water OUT A
@@ -90,19 +90,39 @@ public class I2CComm {
     	memset(readBuffer, readBuffer.length, NULL);
     	memset(writeBuffer, writeBuffer.length, NULL);
     	writeBuffer[0] = I2CCMD_MASTER_START;
-    	proMini1.read(writeBuffer, 0, 1, readBuffer, 0, 1);
-    	if (readBuffer[0] != I2CCMD_ACK)
+    	try
     	{
-    		// TODO: gestire errore
-    		return;
+	    	proMini1.write(writeBuffer, 0, 1);
+	    	Thread.sleep(100);
+	    	proMini1.read(readBuffer, 0, 2);
+	    	if (readBuffer[1] != I2CCMD_ACK)
+	    	{
+	    		// TODO: gestire errore
+	    		return;
+	    	}
+	    	System.out.printf("device %d - received %d\n", devAddresses[0][0], (int) readBuffer[1]);
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
     	}
 
     	memset(readBuffer, readBuffer.length, NULL);
-    	proMini2.read(writeBuffer, 0, 1, readBuffer, 0, 1);
-    	if (readBuffer[0] != I2CCMD_ACK)
+    	try
     	{
-    		// TODO: gestire errore
-    		return;
+	    	proMini2.write(writeBuffer, 0, 1);
+	    	Thread.sleep(100);
+	    	proMini2.read(readBuffer, 0, 2);
+	    	if (readBuffer[1] != I2CCMD_ACK)
+	    	{
+	    		// TODO: gestire errore
+	    		return;
+	    	}
+	    	System.out.printf("device %d - received %d\n", devAddresses[1][0], (int) readBuffer[1]);
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
     	}
     }
 
@@ -112,33 +132,44 @@ public class I2CComm {
 
         proMini1 = i2c.getDevice(devAddresses[PRO_MINI_1][I2C_ADDR_BUS]);
         proMini2 = i2c.getDevice(devAddresses[PRO_MINI_2][I2C_ADDR_BUS]);
-        alertDeviceOnStart();
     }
     
     
     public byte[] getControllerStatus(int controllerIdx) throws IOException, InterruptedException
     {
-    	I2CDevice dummy = (controllerIdx == 1 ? proMini1 : proMini2);
+    	I2CDevice dummy = (controllerIdx == PRO_MINI_1 ? proMini1 : proMini2);
     	
-    	memset(readBuffer, readBuffer.length, NULL);
     	memset(writeBuffer, writeBuffer.length, NULL);
     	writeBuffer[0] = I2CCMD_GET;
-    	writeBuffer[1] = 9;
-    	writeBuffer[2] = I2C_ADDR_STARRYSKY_RED;
-    	writeBuffer[3] = I2C_ADDR_STARRYSKY_GREEN;
-    	writeBuffer[4] = I2C_ADDR_STARRYSKY_BLUE;
-    	writeBuffer[5] = I2C_ADDR_LIGHTSTRIPE_RED;
-    	writeBuffer[6] = I2C_ADDR_LIGHTSTRIPE_GREEN;
-    	writeBuffer[7] = I2C_ADDR_LIGHTSTRIPE_BLUE;
-    	writeBuffer[8] = I2C_ADDR_HUMIDITY_AND_TEMP;
-    	writeBuffer[9] = I2C_ADDR_SG_TEMP;
-    	writeBuffer[10] = I2C_ADDR_SG;
-    	dummy.read(writeBuffer, 0, 11);
+    	writeBuffer[1] = 4;
+    	writeBuffer[2] = I2C_ADDR_STARRYSKY_GREEN;
+    	writeBuffer[3] = I2C_ADDR_LIGHTSTRIPE_RED;
+    	writeBuffer[4] = I2C_ADDR_LIGHTSTRIPE_BLUE;
+    	writeBuffer[5] = I2C_ADDR_SG_TEMP;
+//    	writeBuffer[2] = I2C_ADDR_STARRYSKY_RED;
+//    	writeBuffer[3] = I2C_ADDR_STARRYSKY_GREEN;
+//    	writeBuffer[4] = I2C_ADDR_STARRYSKY_BLUE;
+//    	writeBuffer[5] = I2C_ADDR_LIGHTSTRIPE_RED;
+//    	writeBuffer[6] = I2C_ADDR_LIGHTSTRIPE_GREEN;
+//    	writeBuffer[7] = I2C_ADDR_LIGHTSTRIPE_BLUE;
+//    	writeBuffer[8] = I2C_ADDR_HUMIDITY_AND_TEMP;
+//    	writeBuffer[9] = I2C_ADDR_SG_TEMP;
+//    	writeBuffer[10] = I2C_ADDR_SG;
+    	dummy.write(writeBuffer, 0, writeBuffer[1] + 2);
 
     	Thread.sleep(500);
-    	dummy.read(readBuffer, 0, 1);
-    	dummy.read(readBuffer, 1, readBuffer[0]);
-
+    	memset(readBuffer, readBuffer.length, NULL);
+    	int bytesRead = dummy.read(readBuffer, 0, readBuffer.length);
+		System.out.printf("device %d - read %d - message len returned is %d\n", 
+					devAddresses[controllerIdx][0],
+					bytesRead,
+					(int) readBuffer[0]);
+    	// dummy.read(readBuffer, 1, (int) readBuffer[0]);
+    	for(int i = 0; i < readBuffer[0]; i++)
+    	{
+    		System.out.printf("%d ", readBuffer[i + 1]);
+    	}
+    	System.out.println();
     	return readBuffer;   	
     }
 
