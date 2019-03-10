@@ -1,4 +1,4 @@
-package steamBathJava;
+package it.lsoft.steambath;
 
 import java.io.IOException;
 
@@ -14,9 +14,9 @@ import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 //import javax.swing.SwingUtilities;
 
 public class Manager {
-	static I2CComm communicator;
+	I2CComm communicator;
 	
-	public static void main(String[] args) throws UnsupportedBusNumberException, IOException, InterruptedException 
+	public Manager() throws UnsupportedBusNumberException, IOException, InterruptedException 
 	{
 		byte[] buffer = new byte[1024];
 		

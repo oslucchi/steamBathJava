@@ -1,4 +1,4 @@
-package steamBathJava;
+package it.lsoft.steambath;
 
 
 import java.io.IOException;
@@ -11,8 +11,6 @@ import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 public class I2CComm {
     public static final int PRO_MINI_1 = 0;
     public static final int PRO_MINI_2 = 1;
-
-
 
     public static final byte I2CCMD_ACK = (byte)0xFF;
     public static final byte I2CCMD_MASTER_START = 0x1;

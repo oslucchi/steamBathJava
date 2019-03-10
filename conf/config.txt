@@ -1,0 +1,27 @@
+[starry]
+redMin = 1
+redMax = 2
+redSpeed = 50
+greenMin = 3
+greenMax = 4
+greenSpeed = 51
+blueMin = 5
+blueMax = 6
+blueSpeed = 52
+
+[lights]
+redMin = 7
+redMax = 8
+redSpeed = 53
+greenMin = 9
+greenMax = 10
+greenSpeed = 54
+blueMin = 11
+blueMax = 12
+blueSpeed = 55
+
+[steamGen]
+humidity = 1
+temperature = 3
+timer = 2
+
