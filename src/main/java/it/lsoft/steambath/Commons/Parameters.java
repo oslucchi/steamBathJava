@@ -1,6 +1,5 @@
 package it.lsoft.steambath.Commons;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
@@ -28,9 +27,8 @@ public class Parameters
 	int timer = 30;
 	
 	private static Parameters instance = null;
-	private static String confFilePath;
+	private static String confFilePath = null;
 	private Ini ini = null;
-	private File configFile;
 	
 	public static Parameters getInstance(String pConfFilePath) //throws InvalidFileFormatException, IOException
 	{
@@ -54,8 +52,7 @@ public class Parameters
 	    // Leggere i Parametri con cui gira questa istanza dell'applicazione
 		try 
 		{
-			configFile = new File(confFilePath);
-			ini = new Wini(configFile.getAbsoluteFile());
+			ini = new Wini(getClass().getResourceAsStream(confFilePath));
 		}
 		catch (IOException e) 
 		{

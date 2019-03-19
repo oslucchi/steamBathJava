@@ -10,8 +10,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.5.1</version>
         <configuration>
-          <source/>
-          <target/>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
 		<plugin>
@@ -41,12 +41,20 @@
       <!-- 
       		        <mainClass>${fully.qualified.main.class}</mainClass>
       -->
-	            <mainClass>steamBathJava.Manager</mainClass>
+	            <mainClass>Steambath</mainClass>
 		      </manifest>
 		    </archive>
 		  </configuration>
 		</plugin>
     </plugins>
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </resource>
+    </resources>
   </build>
   <dependencies>
 	<dependency>
@@ -64,6 +72,5 @@
 		<artifactId>ini4j</artifactId>
 		<version>0.5.1</version>
 	</dependency>
-	
   </dependencies>
 </project>
