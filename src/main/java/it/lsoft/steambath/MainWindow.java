@@ -1,8 +1,6 @@
 package it.lsoft.steambath;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -14,19 +12,19 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
 import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
 import it.lsoft.steambath.Commons.TimerHandler;
-import it.lsoft.steambath.Commons.VirtualKeyboard;
+import it.lsoft.steambath.Commons.Visualizer;
 
 import javax.swing.JRadioButton;
 
 public class MainWindow 
-	extends JFrame 
+	extends JPanel
 	implements MouseListener, ItemListener 
 {
 
@@ -34,10 +32,9 @@ public class MainWindow
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JFrame frame;
 	private JRadioButton rdbtnLightsAuto, rdbtnLightsManual, rdbtnStarryAuto, rdbtnStarryManual;
 	private I2CComm i2c;
-	private VirtualKeyboard keyb;
+	private Visualizer v;
 	
 	/**
 	 * Create the application.
@@ -48,17 +45,14 @@ public class MainWindow
 	public MainWindow(I2CComm i2c) throws UnsupportedBusNumberException, IOException, InterruptedException 
 	{
 		this.i2c = i2c;
-        EventQueue.invokeLater(() -> {
-            keyb = new VirtualKeyboard();
-        });
-
-		setUndecorated(true);
+		// setUndecorated(true);
+		setLayout(null);
 		initialize();
 	}
 
-	public VirtualKeyboard getKeyb()
+	public void setVisualizer(Visualizer v)
 	{
-		return keyb;
+		this.v = v;
 	}
 	
 	/**
@@ -66,16 +60,14 @@ public class MainWindow
 	 */
 	private void initialize() 
 	{
-		setBounds(0, 0, 600, 1024);
-		getContentPane().setFont(new Font("Arsenal", Font.PLAIN, 14));
-		// setSize(new Dimension(600, 1024));
-		setExtendedState(MAXIMIZED_BOTH);
+//		setBounds(1, 1, 598, 1022);
+		setFont(new Font("Arsenal", Font.PLAIN, 14));
+		setSize(600, 1024);
 		setBackground(Color.WHITE);
-		// setAlwaysOnTop(true);
-		setResizable(false);
+		// setResizable(false);
 
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		getContentPane().setLayout(null);
+		// setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLayout(null);
 		
 		BufferedImage myPicture = null;
 		try {
@@ -88,12 +80,12 @@ public class MainWindow
 		settingsIcon.setBounds(550, 10, 20, 20);
 		settingsIcon.addMouseListener(this);
 		settingsIcon.setName("settings");
-		getContentPane().add(settingsIcon);
+		add(settingsIcon);
 		
 		JLabel dateAndTime = new JLabel("");
-		dateAndTime.setFont(new Font("Arsenal", Font.BOLD, 46));
+		dateAndTime.setFont(new Font("Arsenal", Font.ITALIC, 46));
 		dateAndTime.setBounds(52, 217, 542, 63);
-		getContentPane().add(dateAndTime);
+		add(dateAndTime);
 		TimerHandler tm = new TimerHandler(dateAndTime);
 		tm.start();
 		
@@ -102,56 +94,63 @@ public class MainWindow
 		lblNewLabel.setBounds(52, 25, 247, 15);
 		lblNewLabel.addMouseListener(this);
 		lblNewLabel.setName("exitApp");
-		getContentPane().add(lblNewLabel);
+		add(lblNewLabel);
 		
 		JToggleButton tglbtnStarrySky = new JToggleButton("Starry sky");
-		tglbtnStarrySky.setFont(new Font("Arsenal", Font.BOLD, 18));
+		tglbtnStarrySky.setForeground(Color.DARK_GRAY);
+		tglbtnStarrySky.setBackground(Color.WHITE);
+		tglbtnStarrySky.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		tglbtnStarrySky.setBounds(52, 307, 146, 25);
 		tglbtnStarrySky.addItemListener(this);
 		tglbtnStarrySky.setName("starryCommand");
-		getContentPane().add(tglbtnStarrySky);
+		add(tglbtnStarrySky);
 		
 		rdbtnStarryAuto = new JRadioButton("Auto");
+		rdbtnStarryAuto.setForeground(Color.DARK_GRAY);
+		rdbtnStarryAuto.setBackground(Color.WHITE);
 		rdbtnStarryAuto.setSelected(true);
-		rdbtnStarryAuto.setFont(new Font("Arsenal", Font.BOLD, 18));
+		rdbtnStarryAuto.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		rdbtnStarryAuto.setBounds(219, 295, 149, 23);
-		getContentPane().add(rdbtnStarryAuto);
+		add(rdbtnStarryAuto);
 		
 		rdbtnStarryManual = new JRadioButton("Manual");
-		rdbtnStarryManual.setFont(new Font("Arsenal", Font.BOLD, 18));
+		rdbtnStarryManual.setForeground(Color.DARK_GRAY);
+		rdbtnStarryManual.setBackground(Color.WHITE);
+		rdbtnStarryManual.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		rdbtnStarryManual.setBounds(219, 328, 149, 23);
-		getContentPane().add(rdbtnStarryManual);
+		add(rdbtnStarryManual);
 		
 		ButtonGroup bgStarry = new ButtonGroup();    
 		bgStarry.add(rdbtnStarryAuto);bgStarry.add(rdbtnStarryManual);    
 		
 		JToggleButton tglbtnCabinLights = new JToggleButton("Cabin lights");
-		tglbtnCabinLights.setFont(new Font("Arsenal", Font.BOLD, 18));
+		tglbtnCabinLights.setForeground(Color.DARK_GRAY);
+		tglbtnCabinLights.setBackground(Color.WHITE);
+		tglbtnCabinLights.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		tglbtnCabinLights.setBounds(52, 414, 146, 25);
 		tglbtnCabinLights.addItemListener(this);
 		tglbtnCabinLights.setName("lightsCommand");
-		getContentPane().add(tglbtnCabinLights);
+		add(tglbtnCabinLights);
 		
 		rdbtnLightsAuto = new JRadioButton("Auto");
+		rdbtnLightsAuto.setForeground(Color.DARK_GRAY);
+		rdbtnLightsAuto.setBackground(Color.WHITE);
 		rdbtnLightsAuto.setSelected(true);
-		rdbtnLightsAuto.setFont(new Font("Arsenal", Font.BOLD, 18));
+		rdbtnLightsAuto.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		rdbtnLightsAuto.setBounds(219, 403, 149, 23);
-		getContentPane().add(rdbtnLightsAuto);
+		add(rdbtnLightsAuto);
 		
 		rdbtnLightsManual = new JRadioButton("Manual");
-		rdbtnLightsManual.setFont(new Font("Arsenal", Font.BOLD, 18));
+		rdbtnLightsManual.setForeground(Color.DARK_GRAY);
+		rdbtnLightsManual.setBackground(Color.WHITE);
+		rdbtnLightsManual.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		rdbtnLightsManual.setBounds(219, 436, 149, 23);
-		getContentPane().add(rdbtnLightsManual);
+		add(rdbtnLightsManual);
 
 		ButtonGroup bgLights = new ButtonGroup();    
 		bgLights.add(rdbtnLightsAuto);bgLights.add(rdbtnLightsManual);    
 	}
 	
-	public JFrame getFrame()
-	{
-		return frame;
-	}
-
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
@@ -161,12 +160,11 @@ public class MainWindow
 			switch(source.getName())
 			{
 			case "settings":
-				SteambathConfiguration window = new SteambathConfiguration(keyb);
-				window.getFrame().setVisible(true);
+				((JPanel) v.getFrame("mw")).setVisible(false);
+				((JPanel) v.getFrame("conf")).setVisible(true);
 				
 				break;
 			case "exitApp":
-				dispose();
 				System.exit(0);
 			}
 		}

@@ -44,7 +44,10 @@ public class Keyboard {
     static { 
         try {
             robot = new Robot();
-        }catch(AWTException ex) { }
+        }
+        catch(AWTException ex) {
+        	ex.printStackTrace();
+        }
     }
     
     

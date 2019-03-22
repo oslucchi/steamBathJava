@@ -1,5 +1,6 @@
 package it.lsoft.steambath.Commons;
 
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
@@ -160,10 +161,9 @@ public class Parameters
 		ini.put("steamGen", "humidity", humidity);
 		ini.put("steamGen", "temperature", temperature);
 		ini.put("steamGen", "timer", timer);
-		
 		try 
 		{
-			ini.store();
+			ini.store(new FileWriter(getClass().getResource(confFilePath).getPath()));
 			System.out.println(Integer.parseInt(ini.get("lights", "redMin")) + " " + 
 							   Integer.parseInt(ini.get("lights", "redMax")) + " " + 
 							   Integer.parseInt(ini.get("lights", "redSpeed")));

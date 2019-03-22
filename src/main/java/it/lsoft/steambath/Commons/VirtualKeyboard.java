@@ -11,15 +11,16 @@ import static java.awt.event.KeyEvent.VK_WINDOWS;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class VirtualKeyboard extends javax.swing.JFrame {
+public class VirtualKeyboard extends JFrame {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private final static Color SELECTED_COLOR = new Color(-15304792); //Dark Sky blue
-    private final static Color DEFAULT_KEY_COLOR = new Color(-13421773);//Color.GRAY;
+    private final static Color DEFAULT_KEY_COLOR = Color.darkGray; //new Color(-13421773);//Color.GRAY;
     private static boolean IS_FUNCTION_KEY_PRESSED = false;
 
     private javax.swing.JPanel numpadPanel;
@@ -42,15 +43,15 @@ public class VirtualKeyboard extends javax.swing.JFrame {
 
     public VirtualKeyboard()
     {
-    	setUndecorated(true);
-    	setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setAlwaysOnTop(true);
-        setAutoRequestFocus(false);
-        setBackground(java.awt.Color.black);
+		setUndecorated(true);
+		setAlwaysOnTop(true);
+		setAutoRequestFocus(false);
+		setFocusableWindowState(false);
+		setLayout(null);
+    	setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(java.awt.Color.darkGray);
         setFocusable(false);
-        setFocusableWindowState(false);
-        setResizable(true);
-    	
+        setResizable(false);
 
     	initComponents();
     	pack();
@@ -267,7 +268,7 @@ public class VirtualKeyboard extends javax.swing.JFrame {
         keynumdot = new javax.swing.JLabel();
         keynum0 = new javax.swing.JLabel();
 
-        numpadPanel.setBackground(java.awt.Color.black);
+        numpadPanel.setBackground(java.awt.Color.darkGray);
         keynumdivide.setBackground(DEFAULT_KEY_COLOR);
         keynumdivide.setForeground(java.awt.Color.white);
         keynumdivide.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
