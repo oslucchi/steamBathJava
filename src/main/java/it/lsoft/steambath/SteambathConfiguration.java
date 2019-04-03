@@ -1232,7 +1232,7 @@ public class SteambathConfiguration
 		}
 		JTextField source = (JTextField)e.getSource();
 		Object o = findComponentByName(source.getName().replaceAll("Val", ""));
-		if (o.getClass().getName().compareTo("JSlider") == 0)
+		if ((o != null) && o.getClass().getName().compareTo("JSlider") == 0)
 		{
 			JSlider value = (JSlider) o;
 			if (value != null)
@@ -1240,6 +1240,7 @@ public class SteambathConfiguration
 				value.setValue(Integer.parseInt(source.getText()));
 			}
 		}
+		this.requestFocus();
 	}
 
 	@Override
@@ -1272,7 +1273,7 @@ public class SteambathConfiguration
 		{
 			JTextField source = (JTextField)e.getSource();
 			Object o = findComponentByName(source.getName().replaceAll("Val", ""));
-			if (o.getClass().getName().compareTo("JSlider") == 0)
+			if ((o != null) && o.getClass().getName().compareTo("JSlider") == 0)
 			{
 				JSlider value = (JSlider) o;
 				if (value != null)

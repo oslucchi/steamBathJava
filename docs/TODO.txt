@@ -1,0 +1,5 @@
+Slider not working
+close virtualkeyboard on focustLost
+check written values on save
+components naming (still missing some. Evaluate if needed)
+ 
