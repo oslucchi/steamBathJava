@@ -18,6 +18,7 @@ import javax.swing.JToggleButton;
 
 import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
+import it.lsoft.steambath.Commons.Parameters;
 import it.lsoft.steambath.Commons.TimerHandler;
 import it.lsoft.steambath.Commons.Visualizer;
 
@@ -45,7 +46,6 @@ public class MainWindow
 	public MainWindow(I2CComm i2c) throws UnsupportedBusNumberException, IOException, InterruptedException 
 	{
 		this.i2c = i2c;
-		// setUndecorated(true);
 		setLayout(null);
 		initialize();
 	}
@@ -198,6 +198,7 @@ public class MainWindow
 	public void itemStateChanged(ItemEvent e)
 	{
 		byte[] command = new byte[256];
+		Parameters parms = Parameters.getInstance("/conf/config.txt");
 		
 		if (e.getSource().getClass().getName().compareTo("javax.swing.JToggleButton") == 0)
 		{
@@ -208,17 +209,41 @@ public class MainWindow
 				if (rdbtnStarryManual.isSelected())
 				{
 					command[1] = 4;
-					command[2] = I2CComm.I2CCMD_MANUAL;
-					command[3] = 2;
+					command[2] = I2CComm.CTRLID_STARRYSKY;
+					command[3] = I2CComm.LEDRGB_SET_MANUAL;
 					command[4] = (byte) (e.getStateChange() == ItemEvent.SELECTED ? 1 : 0);
 				}
 				else
 				{
-				 
+					command[1] = 4;
+					command[2] = I2CComm.CTRLID_STARRYSKY;
+					command[3] = I2CComm.LEDRGB_SET_AUTO;
+					command[4] = (byte) parms.getLights()[Parameters.RED][Parameters.MAX];
+					command[5] = (byte) parms.getLights()[Parameters.GREEN][Parameters.MAX];
+					command[6] = (byte) parms.getLights()[Parameters.BLUE][Parameters.MAX];
+					command[7] = (byte) parms.getLights()[Parameters.RED][Parameters.MIN];
+					command[8] = (byte) parms.getLights()[Parameters.GREEN][Parameters.MIN];
+					command[9] = (byte) parms.getLights()[Parameters.BLUE][Parameters.MIN];
+					command[10] = (byte) parms.getLights()[Parameters.RED][Parameters.SPEED];
+					command[11] = (byte) parms.getLights()[Parameters.GREEN][Parameters.SPEED];
+					command[12] = (byte) parms.getLights()[Parameters.BLUE][Parameters.SPEED];
+					command[13] = (byte) parms.getLights()[Parameters.RED][Parameters.SPEED];
+					command[14] = (byte) parms.getLights()[Parameters.GREEN][Parameters.SPEED];
+					command[15] = (byte) parms.getLights()[Parameters.BLUE][Parameters.SPEED];
+					command[16] = (byte) parms.getLights()[Parameters.RED][Parameters.MIN];
+					command[17] = (byte) parms.getLights()[Parameters.GREEN][Parameters.MIN];
+					command[18] = (byte) parms.getLights()[Parameters.BLUE][Parameters.MIN];
+					
+					command[19] = (byte) parms.getLights()[Parameters.RED][Parameters.MIN];
+					command[20] = (byte) parms.getLights()[Parameters.GREEN][Parameters.MIN];
+					command[21] = (byte) parms.getLights()[Parameters.BLUE][Parameters.MIN];
+					command[22] = (byte) parms.getLights()[Parameters.GREEN][Parameters.MIN];
+					command[23] = (byte) parms.getLights()[Parameters.BLUE][Parameters.MIN];
+					command[24] = (byte) parms.getLights()[Parameters.GREEN][Parameters.MIN];
 				}
 				try 
 				{
-					i2c.command(command, (byte) I2CComm.I2C_STARRYSKY);
+					i2c.command(command);
 				} 
 				catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 				{

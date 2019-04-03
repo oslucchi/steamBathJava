@@ -11,6 +11,23 @@ public class I2CComm {
     public static final int I2C_STARRYSKY = 7;
     public static final int I2C_LIGHTSTRIPE = 8;
 
+    public static final byte CTRLID_RGBSTRIPE = 1;
+    public static final byte CTRLID_STARRYSKY = 2;
+    public static final byte CTRLID_STEAM_POWER = 3;
+    public static final byte CTRLID_STEAM_WATER_IN = 4;
+    public static final byte CTRLID_STEAM_WATER_OUT = 5;
+    public static final byte CTRLID_HUMIDITY_SENSOR = 6;
+
+    public static final byte LEDRGB_GET_ACTUAL = 1;
+    public static final byte LEDRGB_SET_MANUAL = 2;
+    public static final byte LEDRGB_SET_AUTO = 3;
+    public static final byte LEDRGB_SET_BRIGHTNESS = 4;
+    public static final byte LEDRGB_SWITCH_ON_OFF = 5;
+    public static final byte LEDRGB_SET_SPEED = 6;
+    public static final byte LEDRGB_RESET_TIMERS = 7;
+	public static final byte LEDRGB_FADE_IN_OUT = 8;
+	public static final byte LEDRGB_SET_TIMERS = 9;
+    
     public static final byte I2CCMD_ACK = (byte)0xFF;
     public static final byte I2CCMD_MASTER_START = 0x1;
     public static final byte I2CCMD_GET = 0x2;
@@ -81,18 +98,18 @@ public class I2CComm {
         lights = i2c.getDevice(I2C_LIGHTSTRIPE);
     }
     
-    public boolean command(byte[] cmd, byte controller) throws UnsupportedBusNumberException, IOException, InterruptedException
+    public boolean command(byte[] cmd) throws UnsupportedBusNumberException, IOException, InterruptedException
     {
         I2CDevice ctrl = null;
 
 		byte[] readBuffer = new byte[128];
 		int idx = 0;
 		
-		if (controller == 7)
+		if (cmd[0] == 7)
 		{
 			ctrl = starry;
 		}
-		else if (controller == 8)
+		else if (cmd[0] == 8)
 		{
 			ctrl = lights;
 		}
