@@ -668,6 +668,7 @@ public class SteambathConfiguration
 		timer.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		timer.setBounds(488, 693, 51, 32);
 		timer.setValue(parms.getHumidity());
+		timer.setName("timer");
 		add(timer);
 		
 		JSpinner humidity = new JSpinner();
@@ -676,6 +677,7 @@ public class SteambathConfiguration
 		humidity.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		humidity.setBounds(105, 693, 70, 32);
 		humidity.setValue(parms.getTemperature());
+		humidity.setName("humidity");
 		add(humidity);
 		
 		JSpinner temperature = new JSpinner();
@@ -684,6 +686,7 @@ public class SteambathConfiguration
 		temperature.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		temperature.setBounds(320, 693, 70, 32);
 		temperature.setValue(parms.getTimer());
+		temperature.setName("temperature");
 		add(temperature);
 
 		JButton btnSave = new JButton("Save");
@@ -713,6 +716,33 @@ public class SteambathConfiguration
 				parms.setLightsElement(Parameters.BLUE, Parameters.MIN, lightsBlueMin.getValue());
 				parms.setLightsElement(Parameters.BLUE, Parameters.MAX, lightsBlueMax.getValue());
 				parms.setLightsElement(Parameters.BLUE, Parameters.SPEED, lightsBlueSpeed.getValue());
+
+				parms.setStarryTimers(Parameters.RED, Parameters.HOURS, starryRedTmrHoursVal.getText());
+				parms.setStarryTimers(Parameters.RED, Parameters.MINS, starryRedTmrMinsVal.getText());
+				parms.setStarryTimers(Parameters.RED, Parameters.SECS, starryRedTmrSecsVal.getText());
+				parms.setStarryTimers(Parameters.RED, Parameters.TENTH_OF_MILS, starryRedTmrMilsVal.getText());
+				parms.setStarryTimers(Parameters.GREEN, Parameters.HOURS, starryGreenTmrHoursVal.getText());
+				parms.setStarryTimers(Parameters.GREEN, Parameters.MINS, starryGreenTmrMinsVal.getText());
+				parms.setStarryTimers(Parameters.GREEN, Parameters.SECS, starryGreenTmrSecsVal.getText());
+				parms.setStarryTimers(Parameters.GREEN, Parameters.TENTH_OF_MILS, starryGreenTmrMilsVal.getText());
+				parms.setStarryTimers(Parameters.BLUE, Parameters.HOURS, starryBlueTmrHoursVal.getText());
+				parms.setStarryTimers(Parameters.BLUE, Parameters.MINS, starryBlueTmrMinsVal.getText());
+				parms.setStarryTimers(Parameters.BLUE, Parameters.SECS, starryBlueTmrSecsVal.getText());
+				parms.setStarryTimers(Parameters.BLUE, Parameters.TENTH_OF_MILS, starryBlueTmrMilsVal.getText());
+				
+				parms.setLightsTimers(Parameters.RED, Parameters.HOURS, lightsRedTmrHoursVal.getText());
+				parms.setLightsTimers(Parameters.RED, Parameters.MINS, lightsRedTmrMinsVal.getText());
+				parms.setLightsTimers(Parameters.RED, Parameters.SECS, lightsRedTmrSecsVal.getText());
+				parms.setLightsTimers(Parameters.RED, Parameters.TENTH_OF_MILS, lightsRedTmrMilsVal.getText());
+				parms.setLightsTimers(Parameters.GREEN, Parameters.HOURS, lightsGreenTmrHoursVal.getText());
+				parms.setLightsTimers(Parameters.GREEN, Parameters.MINS, lightsGreenTmrMinsVal.getText());
+				parms.setLightsTimers(Parameters.GREEN, Parameters.SECS, lightsGreenTmrSecsVal.getText());
+				parms.setLightsTimers(Parameters.GREEN, Parameters.TENTH_OF_MILS, lightsGreenTmrMilsVal.getText());
+				parms.setLightsTimers(Parameters.BLUE, Parameters.HOURS, lightsBlueTmrHoursVal.getText());
+				parms.setLightsTimers(Parameters.BLUE, Parameters.MINS, lightsBlueTmrMinsVal.getText());
+				parms.setLightsTimers(Parameters.BLUE, Parameters.SECS, lightsBlueTmrSecsVal.getText());
+				parms.setLightsTimers(Parameters.BLUE, Parameters.TENTH_OF_MILS, lightsBlueTmrMilsVal.getText());
+				
 				parms.setHumidity((int)humidity.getValue());
 				parms.setTemperature((int)temperature.getValue());
 				parms.setTimer((int)timer.getValue());
@@ -1225,21 +1255,6 @@ public class SteambathConfiguration
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		if (keyb != null)
-		{
-			keyb.dispose();
-			keyb = null;
-		}
-		JTextField source = (JTextField)e.getSource();
-		Object o = findComponentByName(source.getName().replaceAll("Val", ""));
-		if ((o != null) && o.getClass().getName().compareTo("JSlider") == 0)
-		{
-			JSlider value = (JSlider) o;
-			if (value != null)
-			{
-				value.setValue(Integer.parseInt(source.getText()));
-			}
-		}
 		this.requestFocus();
 	}
 
@@ -1273,16 +1288,23 @@ public class SteambathConfiguration
 		{
 			JTextField source = (JTextField)e.getSource();
 			Object o = findComponentByName(source.getName().replaceAll("Val", ""));
-			if ((o != null) && o.getClass().getName().compareTo("JSlider") == 0)
+			if ((o != null) && o.getClass().getName().compareTo("javax.swing.JSlider") == 0)
 			{
-				JSlider value = (JSlider) o;
-				if (value != null)
+				JSlider slider = (JSlider) o;
+				if (slider != null)
 				{
-					value.setValue(Integer.parseInt(source.getText()));
+					if (Integer.parseInt(source.getText()) > slider.getMaximum())
+						source.setText(String.valueOf(slider.getMaximum()));
+					if (Integer.parseInt(source.getText()) < slider.getMinimum())
+						source.setText(String.valueOf(slider.getMinimum()));
+					slider.setValue(Integer.parseInt(source.getText()));
 				}
 			}
-			if (keyb != null)
-				keyb.dispose();
 		}
-	}	
+		if (keyb != null)
+		{
+			keyb.setVisible(true);
+			keyb.dispose();
+		}
+	}
 }

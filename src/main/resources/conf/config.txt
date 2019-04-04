@@ -23,9 +23,6 @@ blueTmrHours = 0
 blueTmrMins = 0
 blueTmrSecs = 0
 blueTmrTenthMils = 511
-redTmrMils = 0
-greenTmrMils = 0
-blueTmrMils = 0
 
 [lights]
 redMin = 255
@@ -52,9 +49,14 @@ blueTmrHours = 0
 blueTmrMins = 0
 blueTmrSecs = 0
 blueTmrTenthMils = 800
-redTmrMils = 0
-greenTmrMils = 0
-blueTmrMils = 0
+
+[manual]
+starryManRedVal = 127
+starryManGreenVal = 192
+starryManBlueVal = 255
+lightsManRedVal = 126
+lightsManGreenVal = 191
+lightsManBlueVal = 254
 
 [steamGen]
 humidity = 3

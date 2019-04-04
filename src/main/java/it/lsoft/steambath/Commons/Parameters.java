@@ -32,6 +32,9 @@ public class Parameters
 	int[][] lights = new int[3][4];
 	int[][] starryTimers = new int[3][7];
 	int[][] lightsTimers = new int[3][7];
+	int[] starryManual = new int[3];
+	int[] lightsManual = new int[3];
+	
 	int humidity = 70;
 	int temperature = 40;
 	int timer = 30;
@@ -119,6 +122,14 @@ public class Parameters
 		lightsTimers[BLUE][MINS] = Integer.parseInt(ini.get("lights", "blueTmrMins"));
 		lightsTimers[BLUE][SECS] = Integer.parseInt(ini.get("lights", "blueTmrSecs"));
 		lightsTimers[BLUE][TENTH_OF_MILS] = Integer.parseInt(ini.get("lights", "blueTmrTenthMils"));
+
+		starryManual[RED] = Integer.parseInt(ini.get("manual", "starryManRedVal"));
+		starryManual[GREEN] = Integer.parseInt(ini.get("manual", "starryManGreenVal"));
+		starryManual[BLUE] = Integer.parseInt(ini.get("manual", "starryManBlueVal"));
+		lightsManual[RED] = Integer.parseInt(ini.get("manual", "lightsManRedVal"));
+		lightsManual[GREEN] = Integer.parseInt(ini.get("manual", "lightsManGreenVal"));
+		lightsManual[BLUE] = Integer.parseInt(ini.get("manual", "lightsManBlueVal"));
+				
 
 		setTimers();
 		
@@ -327,7 +338,6 @@ public class Parameters
 	{
 		String retVal[] = new String[3];
 		retVal[RED] = new String();
-		int y;
 		for(int i = 7; i >= 6; i--)
 		{
 			retVal[RED] += (((starryTimers[RED][TMR_BYTE_0] & (1 << i)) == 0) ? "0" : "1");
@@ -424,18 +434,18 @@ public class Parameters
 		ini.put("starry", "blueMin", starry[BLUE][MIN]);
 		ini.put("starry", "blueMax", starry[BLUE][MAX]);
 		ini.put("starry", "blueSpeed", starry[BLUE][SPEED]);
-		ini.put("starry", "redTmrHours", starryTimers[RED][DAYS]);
-		ini.put("starry", "redTmrMins", starryTimers[RED][HOURS]);
-		ini.put("starry", "redTmrSecs", starryTimers[RED][MINS]);
-		ini.put("starry", "redTmrMils", starryTimers[RED][SECS]);
-		ini.put("starry", "greenTmrHours", starryTimers[GREEN][DAYS]);
-		ini.put("starry", "greenTmrMins", starryTimers[GREEN][HOURS]);
-		ini.put("starry", "greenTmrSecs", starryTimers[GREEN][MINS]);
-		ini.put("starry", "greenTmrMils", starryTimers[GREEN][SECS]);
-		ini.put("starry", "blueTmrHours", starryTimers[BLUE][DAYS]);
-		ini.put("starry", "blueTmrMins", starryTimers[BLUE][HOURS]);
-		ini.put("starry", "blueTmrSecs", starryTimers[BLUE][MINS]);
-		ini.put("starry", "blueTmrMils", starryTimers[BLUE][SECS]);
+		ini.put("starry", "redTmrHours", starryTimers[RED][HOURS]);
+		ini.put("starry", "redTmrMins", starryTimers[RED][MINS]);
+		ini.put("starry", "redTmrSecs", starryTimers[RED][SECS]);
+		ini.put("starry", "redTmrMils", starryTimers[RED][TENTH_OF_MILS]);
+		ini.put("starry", "greenTmrHours", starryTimers[GREEN][HOURS]);
+		ini.put("starry", "greenTmrMins", starryTimers[GREEN][MINS]);
+		ini.put("starry", "greenTmrSecs", starryTimers[GREEN][SECS]);
+		ini.put("starry", "greenTmrMils", starryTimers[GREEN][TENTH_OF_MILS]);
+		ini.put("starry", "blueTmrHours", starryTimers[BLUE][HOURS]);
+		ini.put("starry", "blueTmrMins", starryTimers[BLUE][MINS]);
+		ini.put("starry", "blueTmrSecs", starryTimers[BLUE][SECS]);
+		ini.put("starry", "blueTmrMils", starryTimers[BLUE][TENTH_OF_MILS]);
 
 		ini.put("lights", "redMin", lights[RED][MIN]);
 		ini.put("lights", "redMax", lights[RED][MAX]);
@@ -446,18 +456,25 @@ public class Parameters
 		ini.put("lights", "blueMin", lights[BLUE][MIN]);
 		ini.put("lights", "blueMax", lights[BLUE][MAX]);
 		ini.put("lights", "blueSpeed", lights[BLUE][SPEED]);
-		ini.put("lights", "redTmrHours", lightsTimers[RED][DAYS]);
-		ini.put("lights", "redTmrMins", lightsTimers[RED][HOURS]);
-		ini.put("lights", "redTmrSecs", lightsTimers[RED][MINS]);
-		ini.put("lights", "redTmrMils", lightsTimers[RED][SECS]);
-		ini.put("lights", "greenTmrHours", lightsTimers[GREEN][DAYS]);
-		ini.put("lights", "greenTmrMins", lightsTimers[GREEN][HOURS]);
-		ini.put("lights", "greenTmrSecs", lightsTimers[GREEN][MINS]);
-		ini.put("lights", "greenTmrMils", lightsTimers[GREEN][SECS]);
-		ini.put("lights", "blueTmrHours", lightsTimers[BLUE][DAYS]);
-		ini.put("lights", "blueTmrMins", lightsTimers[BLUE][HOURS]);
-		ini.put("lights", "blueTmrSecs", lightsTimers[BLUE][MINS]);
-		ini.put("lights", "blueTmrMils", lightsTimers[BLUE][SECS]);
+		ini.put("lights", "redTmrHours", lightsTimers[RED][HOURS]);
+		ini.put("lights", "redTmrMins", lightsTimers[RED][MINS]);
+		ini.put("lights", "redTmrSecs", lightsTimers[RED][SECS]);
+		ini.put("lights", "redTmrMils", lightsTimers[RED][TENTH_OF_MILS]);
+		ini.put("lights", "greenTmrHours", lightsTimers[GREEN][HOURS]);
+		ini.put("lights", "greenTmrMins", lightsTimers[GREEN][MINS]);
+		ini.put("lights", "greenTmrSecs", lightsTimers[GREEN][SECS]);
+		ini.put("lights", "greenTmrMils", lightsTimers[GREEN][TENTH_OF_MILS]);
+		ini.put("lights", "blueTmrHours", lightsTimers[BLUE][HOURS]);
+		ini.put("lights", "blueTmrMins", lightsTimers[BLUE][MINS]);
+		ini.put("lights", "blueTmrSecs", lightsTimers[BLUE][SECS]);
+		ini.put("lights", "blueTmrMils", lightsTimers[BLUE][TENTH_OF_MILS]);
+
+		ini.put("manual", "starryManRedVal", starryManual[RED]);
+		ini.put("manual", "starryManGreenVal", starryManual[GREEN]);
+		ini.put("manual", "starryManBlueVal", starryManual[BLUE]);
+		ini.put("manual", "lightsManRedVal", lightsManual[RED]);
+		ini.put("manual", "lightsManGreenVal", lightsManual[GREEN]);
+		ini.put("manual", "lightsManBlueVal", lightsManual[BLUE]);
 
 		setTimers();
 
@@ -476,4 +493,30 @@ public class Parameters
 			e.printStackTrace();
 		}
 	}
+
+	public void setStarryTimers(int color, int item, String value) {
+		this.starryTimers[color][item] = Integer.parseInt(value);
+	}
+
+	public void setLightsTimers(int color, int item, String value) {
+		this.lightsTimers [color][item] = Integer.parseInt(value);
+	}
+
+	public int[] getStarryManual() {
+		return starryManual;
+	}
+
+	public void setStarryManual(int[] starryManual) {
+		this.starryManual = starryManual;
+	}
+
+	public int[] getLightsManual() {
+		return lightsManual;
+	}
+
+	public void setLightsManual(int[] lightsManual) {
+		this.lightsManual = lightsManual;
+	}
+	
+	
 }
