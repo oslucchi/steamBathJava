@@ -749,7 +749,7 @@ public class SteambathConfiguration
 				parms.save();
 				if (keyb != null)
 					keyb.dispose();
-				((JPanel) v.getFrame("mw")).setVisible(true);
+				((JPanel) v.getFrame("sm")).setVisible(true);
 				setVisible(false);
 			}
 		});
@@ -764,7 +764,7 @@ public class SteambathConfiguration
 			{
 				if (keyb != null)
 					keyb.dispose();
-				((JPanel) v.getFrame("mw")).setVisible(true);
+				((JPanel) v.getFrame("sm")).setVisible(true);
 				setVisible(false);
 			}
 		});

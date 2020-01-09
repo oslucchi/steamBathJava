@@ -1,6 +1,6 @@
 package it.lsoft.steambath.Commons;
 
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
@@ -20,13 +20,14 @@ public class Parameters
 	static public final int MIN = 0;
 	static public final int MAX = 1;
 	static public final int SPEED = 2;
+	static public final int ACT = 3;
 	static public final int TMR_BYTE_0 = 0;
 	static public final int TMR_BYTE_1 = 1;
 	static public final int DAYS = 2;
 	static public final int HOURS = 3;
 	static public final int MINS = 4;
 	static public final int SECS = 5;
-	static public final int TENTH_OF_MILS= 6;
+	static public final int TENTH_OF_MILS = 6;
 	
 	int[][] starry = new int[3][4];
 	int[][] lights = new int[3][4];
@@ -76,12 +77,15 @@ public class Parameters
 		starry[RED][MIN] = Integer.parseInt(ini.get("starry", "redMin"));
 		starry[RED][MAX] = Integer.parseInt(ini.get("starry", "redMax"));
 		starry[RED][SPEED] = Integer.parseInt(ini.get("starry", "redSpeed"));
+		starry[RED][ACT] = Integer.parseInt(ini.get("starry", "redAct"));
 		starry[GREEN][MIN] = Integer.parseInt(ini.get("starry", "greenMin"));
 		starry[GREEN][MAX] = Integer.parseInt(ini.get("starry", "greenMax"));
 		starry[GREEN][SPEED] = Integer.parseInt(ini.get("starry", "greenSpeed"));
+		starry[GREEN][ACT] = Integer.parseInt(ini.get("starry", "greenAct"));
 		starry[BLUE][MIN] = Integer.parseInt(ini.get("starry", "blueMin"));
 		starry[BLUE][MAX] = Integer.parseInt(ini.get("starry", "blueMax"));
 		starry[BLUE][SPEED] = Integer.parseInt(ini.get("starry", "blueSpeed"));
+		starry[BLUE][ACT] = Integer.parseInt(ini.get("starry", "blueAct"));
 		starryTimers[RED][DAYS] = Integer.parseInt(ini.get("starry", "redTmrDays"));
 		starryTimers[RED][HOURS] = Integer.parseInt(ini.get("starry", "redTmrHours"));
 		starryTimers[RED][MINS] = Integer.parseInt(ini.get("starry", "redTmrMins"));
@@ -101,12 +105,15 @@ public class Parameters
 		lights[RED][MIN] = Integer.parseInt(ini.get("lights", "redMin"));
 		lights[RED][MAX] = Integer.parseInt(ini.get("lights", "redMax"));
 		lights[RED][SPEED] = Integer.parseInt(ini.get("lights", "redSpeed"));
+		lights[RED][ACT] = Integer.parseInt(ini.get("lights", "redAct"));
 		lights[GREEN][MIN] = Integer.parseInt(ini.get("lights", "greenMin"));
 		lights[GREEN][MAX] = Integer.parseInt(ini.get("lights", "greenMax"));
 		lights[GREEN][SPEED] = Integer.parseInt(ini.get("lights", "greenSpeed"));
+		lights[GREEN][ACT] = Integer.parseInt(ini.get("lights", "greenAct"));
 		lights[BLUE][MIN] = Integer.parseInt(ini.get("lights", "blueMin"));
 		lights[BLUE][MAX] = Integer.parseInt(ini.get("lights", "blueMax"));
 		lights[BLUE][SPEED] = Integer.parseInt(ini.get("lights", "blueSpeed"));
+		lights[BLUE][ACT] = Integer.parseInt(ini.get("lights", "blueAct"));
 		lightsTimers[RED][DAYS] = Integer.parseInt(ini.get("lights", "redTmrDays"));
 		lightsTimers[RED][HOURS] = Integer.parseInt(ini.get("lights", "redTmrHours"));
 		lightsTimers[RED][MINS] = Integer.parseInt(ini.get("lights", "redTmrMins"));
@@ -122,7 +129,7 @@ public class Parameters
 		lightsTimers[BLUE][MINS] = Integer.parseInt(ini.get("lights", "blueTmrMins"));
 		lightsTimers[BLUE][SECS] = Integer.parseInt(ini.get("lights", "blueTmrSecs"));
 		lightsTimers[BLUE][TENTH_OF_MILS] = Integer.parseInt(ini.get("lights", "blueTmrTenthMils"));
-
+		
 		starryManual[RED] = Integer.parseInt(ini.get("manual", "starryManRedVal"));
 		starryManual[GREEN] = Integer.parseInt(ini.get("manual", "starryManGreenVal"));
 		starryManual[BLUE] = Integer.parseInt(ini.get("manual", "starryManBlueVal"));
@@ -133,179 +140,179 @@ public class Parameters
 
 		setTimers();
 		
-		humidity = Integer.parseInt(ini.get("steamGen", "humidity"));
-		temperature = Integer.parseInt(ini.get("steamGen", "temperature"));
-		timer = Integer.parseInt(ini.get("steamGen", "timer"));
+		humidity = Integer.parseUnsignedInt(ini.get("steamGen", "humidity"));
+		temperature = Integer.parseUnsignedInt(ini.get("steamGen", "temperature"));
+		timer = Integer.parseUnsignedInt(ini.get("steamGen", "timer"));
 	}
 
 	public void setTimers()
 	{
 		if (starryTimers[RED][DAYS] != 0)
 		{
-			starryTimers[RED][TMR_BYTE_0] = (byte) (3<<6);
+			starryTimers[RED][TMR_BYTE_0] = (int) (3<<6);
 			starryTimers[RED][TMR_BYTE_0] |= (starryTimers[RED][DAYS] & 0b00111110);
-			starryTimers[RED][TMR_BYTE_1] = (byte) ((starryTimers[RED][DAYS] & 0b00000001) << 7);
+			starryTimers[RED][TMR_BYTE_1] = (int) ((starryTimers[RED][DAYS] & 0b00000001) << 7);
 			starryTimers[RED][TMR_BYTE_1] |= (starryTimers[RED][HOURS] & 0b01111111);
 		}
 		else if (starryTimers[RED][HOURS] != 0)
 		{
-			starryTimers[RED][TMR_BYTE_0] = (byte) (2<<6);
+			starryTimers[RED][TMR_BYTE_0] = (int) (2<<6);
 			starryTimers[RED][TMR_BYTE_0] |= (starryTimers[RED][HOURS] & 0b00111110);
-			starryTimers[RED][TMR_BYTE_1] = (byte) ((starryTimers[RED][HOURS] & 0b00000001) << 7);
+			starryTimers[RED][TMR_BYTE_1] = (int) ((starryTimers[RED][HOURS] & 0b00000001) << 7);
 			starryTimers[RED][TMR_BYTE_1] |= (starryTimers[RED][MINS] & 0b01111111);
 		}
 		else if (starryTimers[RED][MINS] != 0)
 		{
-			starryTimers[RED][TMR_BYTE_0] = (byte) (1<<6);
+			starryTimers[RED][TMR_BYTE_0] = (int) (1<<6);
 			starryTimers[RED][TMR_BYTE_0] |= (starryTimers[RED][MINS] & 0b00111110);
-			starryTimers[RED][TMR_BYTE_1] = (byte) ((starryTimers[RED][MINS] & 0b00000001) << 7);
+			starryTimers[RED][TMR_BYTE_1] = (int) ((starryTimers[RED][MINS] & 0b00000001) << 7);
 			starryTimers[RED][TMR_BYTE_1] |= (starryTimers[RED][SECS] & 0b01111111);
 		}
 		else
 		{
-			starryTimers[RED][TMR_BYTE_0] = (byte) (starryTimers[RED][SECS] & 0b00111110);
-			starryTimers[RED][TMR_BYTE_1] = (byte) ((starryTimers[RED][SECS] & 0b00000001) << 7);
+			starryTimers[RED][TMR_BYTE_0] = (int) (starryTimers[RED][SECS] & 0b00111110);
+			starryTimers[RED][TMR_BYTE_1] = (int) ((starryTimers[RED][SECS] & 0b00000001) << 7);
 			starryTimers[RED][TMR_BYTE_1] |= ((starryTimers[RED][TENTH_OF_MILS] / 10) & 0b01111111);
 		}
 
 		if (starryTimers[GREEN][DAYS] != 0)
 		{
-			starryTimers[GREEN][TMR_BYTE_0] = (byte) (3<<6);
+			starryTimers[GREEN][TMR_BYTE_0] = (int) (3<<6);
 			starryTimers[GREEN][TMR_BYTE_0] |= (starryTimers[GREEN][DAYS] & 0b00111110);
-			starryTimers[GREEN][TMR_BYTE_1] = (byte) ((starryTimers[GREEN][DAYS] & 0b00000001) << 7);
+			starryTimers[GREEN][TMR_BYTE_1] = (int) ((starryTimers[GREEN][DAYS] & 0b00000001) << 7);
 			starryTimers[GREEN][TMR_BYTE_1] |= (starryTimers[GREEN][HOURS] & 0b01111111);
 		}
 		else if (starryTimers[GREEN][HOURS] != 0)
 		{
-			starryTimers[GREEN][TMR_BYTE_0] = (byte) (2<<6);
+			starryTimers[GREEN][TMR_BYTE_0] = (int) (2<<6);
 			starryTimers[GREEN][TMR_BYTE_0] |= (starryTimers[GREEN][HOURS] & 0b00111110);
-			starryTimers[GREEN][TMR_BYTE_1] = (byte) ((starryTimers[GREEN][HOURS] & 0b00000001) << 7);
+			starryTimers[GREEN][TMR_BYTE_1] = (int) ((starryTimers[GREEN][HOURS] & 0b00000001) << 7);
 			starryTimers[GREEN][TMR_BYTE_1] |= (starryTimers[GREEN][MINS] & 0b01111111);
 		}
 		else if (starryTimers[GREEN][MINS] != 0)
 		{
-			starryTimers[GREEN][TMR_BYTE_0] = (byte) (1<<6);
+			starryTimers[GREEN][TMR_BYTE_0] = (int) (1<<6);
 			starryTimers[GREEN][TMR_BYTE_0] |= (starryTimers[GREEN][MINS] & 0b00111110);
-			starryTimers[GREEN][TMR_BYTE_1] = (byte) ((starryTimers[GREEN][MINS] & 0b00000001) << 7);
+			starryTimers[GREEN][TMR_BYTE_1] = (int) ((starryTimers[GREEN][MINS] & 0b00000001) << 7);
 			starryTimers[GREEN][TMR_BYTE_1] |= (starryTimers[GREEN][SECS] & 0b01111111);
 		}
 		else
 		{
-			starryTimers[GREEN][TMR_BYTE_0] = (byte) (starryTimers[GREEN][SECS] & 0b00111110);
-			starryTimers[GREEN][TMR_BYTE_1] = (byte) ((starryTimers[GREEN][SECS] & 0b00000001) << 7);
+			starryTimers[GREEN][TMR_BYTE_0] = (int) (starryTimers[GREEN][SECS] & 0b00111110);
+			starryTimers[GREEN][TMR_BYTE_1] = (int) ((starryTimers[GREEN][SECS] & 0b00000001) << 7);
 			starryTimers[GREEN][TMR_BYTE_1] |= ((starryTimers[GREEN][TENTH_OF_MILS] / 10) & 0b01111111);
 		}
 
 		if (starryTimers[BLUE][DAYS] != 0)
 		{
-			starryTimers[BLUE][TMR_BYTE_0] = (byte) (3<<6);
+			starryTimers[BLUE][TMR_BYTE_0] = (int) (3<<6);
 			starryTimers[BLUE][TMR_BYTE_0] |= (starryTimers[BLUE][DAYS] & 0b00111110);
-			starryTimers[BLUE][TMR_BYTE_1] = (byte) ((starryTimers[BLUE][DAYS] & 0b00000001) << 7);
+			starryTimers[BLUE][TMR_BYTE_1] = (int) ((starryTimers[BLUE][DAYS] & 0b00000001) << 7);
 			starryTimers[BLUE][TMR_BYTE_1] |= (starryTimers[BLUE][HOURS] & 0b01111111);
 		}
 		else if (starryTimers[BLUE][HOURS] != 0)
 		{
-			starryTimers[BLUE][TMR_BYTE_0] = (byte) (2<<6);
+			starryTimers[BLUE][TMR_BYTE_0] = (int) (2<<6);
 			starryTimers[BLUE][TMR_BYTE_0] |= (starryTimers[BLUE][HOURS] & 0b00111110);
-			starryTimers[BLUE][TMR_BYTE_1] = (byte) ((starryTimers[BLUE][HOURS] & 0b00000001) << 7);
+			starryTimers[BLUE][TMR_BYTE_1] = (int) ((starryTimers[BLUE][HOURS] & 0b00000001) << 7);
 			starryTimers[BLUE][TMR_BYTE_1] |= (starryTimers[BLUE][MINS] & 0b01111111);
 		}
 		else if (starryTimers[BLUE][MINS] != 0)
 		{
-			starryTimers[BLUE][TMR_BYTE_0] = (byte) (1<<6);
+			starryTimers[BLUE][TMR_BYTE_0] = (int) (1<<6);
 			starryTimers[BLUE][TMR_BYTE_0] |= (starryTimers[BLUE][MINS] & 0b00111110);
-			starryTimers[BLUE][TMR_BYTE_1] = (byte) ((starryTimers[BLUE][MINS] & 0b00000001) << 7);
+			starryTimers[BLUE][TMR_BYTE_1] = (int) ((starryTimers[BLUE][MINS] & 0b00000001) << 7);
 			starryTimers[BLUE][TMR_BYTE_1] |= (starryTimers[BLUE][SECS] & 0b01111111);
 		}
 		else
 		{
-			starryTimers[BLUE][TMR_BYTE_0] = (byte) (starryTimers[BLUE][SECS] & 0b00111110);
-			starryTimers[BLUE][TMR_BYTE_1] = (byte) ((starryTimers[BLUE][SECS] & 0b00000001) << 7);
+			starryTimers[BLUE][TMR_BYTE_0] = (int) (starryTimers[BLUE][SECS] & 0b00111110);
+			starryTimers[BLUE][TMR_BYTE_1] = (int) ((starryTimers[BLUE][SECS] & 0b00000001) << 7);
 			starryTimers[BLUE][TMR_BYTE_1] |= ((starryTimers[BLUE][TENTH_OF_MILS] / 10) & 0b01111111);
 		}
 
 		if (lightsTimers[RED][DAYS] != 0)
 		{
-			lightsTimers[RED][TMR_BYTE_0] = (byte) (3<<6);
+			lightsTimers[RED][TMR_BYTE_0] = (int) (3<<6);
 			lightsTimers[RED][TMR_BYTE_0] |= (lightsTimers[RED][DAYS] & 0b00111110);
-			lightsTimers[RED][TMR_BYTE_1] = (byte) ((lightsTimers[RED][DAYS] & 0b00000001) << 7);
+			lightsTimers[RED][TMR_BYTE_1] = (int) ((lightsTimers[RED][DAYS] & 0b00000001) << 7);
 			lightsTimers[RED][TMR_BYTE_1] |= (lightsTimers[RED][HOURS] & 0b01111111);
 		}
 		else if (lightsTimers[RED][HOURS] != 0)
 		{
-			lightsTimers[RED][TMR_BYTE_0] = (byte) (2<<6);
+			lightsTimers[RED][TMR_BYTE_0] = (int) (2<<6);
 			lightsTimers[RED][TMR_BYTE_0] |= (lightsTimers[RED][HOURS] & 0b00111110);
-			lightsTimers[RED][TMR_BYTE_1] = (byte) ((lightsTimers[RED][HOURS] & 0b00000001) << 7);
+			lightsTimers[RED][TMR_BYTE_1] = (int) ((lightsTimers[RED][HOURS] & 0b00000001) << 7);
 			lightsTimers[RED][TMR_BYTE_1] |= (lightsTimers[RED][MINS] & 0b01111111);
 		}
 		else if (lightsTimers[RED][MINS] != 0)
 		{
-			lightsTimers[RED][TMR_BYTE_0] = (byte) (1<<6);
+			lightsTimers[RED][TMR_BYTE_0] = (int) (1<<6);
 			lightsTimers[RED][TMR_BYTE_0] |= (lightsTimers[RED][MINS] & 0b00111110);
-			lightsTimers[RED][TMR_BYTE_1] = (byte) ((lightsTimers[RED][MINS] & 0b00000001) << 7);
+			lightsTimers[RED][TMR_BYTE_1] = (int) ((lightsTimers[RED][MINS] & 0b00000001) << 7);
 			lightsTimers[RED][TMR_BYTE_1] |= (lightsTimers[RED][SECS] & 0b01111111);
 		}
 		else
 		{
-			lightsTimers[RED][TMR_BYTE_0] = (byte) (lightsTimers[RED][SECS] & 0b00111110);
-			lightsTimers[RED][TMR_BYTE_1] = (byte) ((lightsTimers[RED][SECS] & 0b00000001) << 7);
-			lightsTimers[RED][TMR_BYTE_1] = ((lightsTimers[RED][TENTH_OF_MILS] / 10) & 0b01111111);
+			lightsTimers[RED][TMR_BYTE_0] = (int) (lightsTimers[RED][SECS] & 0b00111110);
+			lightsTimers[RED][TMR_BYTE_1] = (int) ((lightsTimers[RED][SECS] & 0b00000001) << 7);
+			lightsTimers[RED][TMR_BYTE_1] = (int) ((lightsTimers[RED][TENTH_OF_MILS] / 10) & 0b01111111);
 		}
 
 		if (lightsTimers[GREEN][DAYS] != 0)
 		{
-			lightsTimers[GREEN][TMR_BYTE_0] = (byte) (3<<6);
+			lightsTimers[GREEN][TMR_BYTE_0] = (int) (3<<6);
 			lightsTimers[GREEN][TMR_BYTE_0] |= (lightsTimers[GREEN][DAYS] & 0b00111110);
-			lightsTimers[GREEN][TMR_BYTE_1] = (byte) ((lightsTimers[GREEN][DAYS] & 0b00000001) << 7);
+			lightsTimers[GREEN][TMR_BYTE_1] = (int) ((lightsTimers[GREEN][DAYS] & 0b00000001) << 7);
 			lightsTimers[GREEN][TMR_BYTE_1] |= (lightsTimers[GREEN][HOURS] & 0b01111111);
 		}
 		else if (lightsTimers[GREEN][HOURS] != 0)
 		{
-			lightsTimers[GREEN][TMR_BYTE_0] = (byte) (2<<6);
+			lightsTimers[GREEN][TMR_BYTE_0] = (int) (2<<6);
 			lightsTimers[GREEN][TMR_BYTE_0] |= (lightsTimers[GREEN][HOURS] & 0b00111110);
-			lightsTimers[GREEN][TMR_BYTE_1] = (byte) ((lightsTimers[GREEN][HOURS] & 0b00000001) << 7);
+			lightsTimers[GREEN][TMR_BYTE_1] = (int) ((lightsTimers[GREEN][HOURS] & 0b00000001) << 7);
 			lightsTimers[GREEN][TMR_BYTE_1] |= (lightsTimers[GREEN][MINS] & 0b01111111);
 		}
 		else if (lightsTimers[GREEN][MINS] != 0)
 		{
-			lightsTimers[GREEN][TMR_BYTE_0] = (byte) (1<<6);
+			lightsTimers[GREEN][TMR_BYTE_0] = (int) (1<<6);
 			lightsTimers[GREEN][TMR_BYTE_0] |= (lightsTimers[GREEN][MINS] & 0b00111110);
-			lightsTimers[GREEN][TMR_BYTE_1] = (byte) ((lightsTimers[GREEN][MINS] & 0b00000001) << 7);
+			lightsTimers[GREEN][TMR_BYTE_1] = (int) ((lightsTimers[GREEN][MINS] & 0b00000001) << 7);
 			lightsTimers[GREEN][TMR_BYTE_1] |= (lightsTimers[GREEN][SECS] & 0b01111111);
 		}
 		else
 		{
-			lightsTimers[GREEN][TMR_BYTE_0] = (byte) (lightsTimers[GREEN][SECS] & 0b00111110);
-			lightsTimers[GREEN][TMR_BYTE_1] = (byte) ((lightsTimers[GREEN][SECS] & 0b00000001) << 7);
-			lightsTimers[GREEN][TMR_BYTE_1] = ((lightsTimers[GREEN][TENTH_OF_MILS] / 10) & 0b01111111);
+			lightsTimers[GREEN][TMR_BYTE_0] = (int) (lightsTimers[GREEN][SECS] & 0b00111110);
+			lightsTimers[GREEN][TMR_BYTE_1] = (int) ((lightsTimers[GREEN][SECS] & 0b00000001) << 7);
+			lightsTimers[GREEN][TMR_BYTE_1] = (int) ((lightsTimers[GREEN][TENTH_OF_MILS] / 10) & 0b01111111);
 		}
 
 		if (lightsTimers[BLUE][DAYS] != 0)
 		{
-			lightsTimers[BLUE][TMR_BYTE_0] = (byte) (3<<6);
+			lightsTimers[BLUE][TMR_BYTE_0] = (int) (3<<6);
 			lightsTimers[BLUE][TMR_BYTE_0] |= (lightsTimers[BLUE][DAYS] & 0b00111110);
-			lightsTimers[BLUE][TMR_BYTE_1] = (byte) ((lightsTimers[BLUE][DAYS] & 0b00000001) << 7);
+			lightsTimers[BLUE][TMR_BYTE_1] = (int) ((lightsTimers[BLUE][DAYS] & 0b00000001) << 7);
 			lightsTimers[BLUE][TMR_BYTE_1] |= (lightsTimers[BLUE][HOURS] & 0b01111111);
 		}
 		else if (lightsTimers[BLUE][HOURS] != 0)
 		{
-			lightsTimers[BLUE][TMR_BYTE_0] = (byte) (2<<6);
+			lightsTimers[BLUE][TMR_BYTE_0] = (int) (2<<6);
 			lightsTimers[BLUE][TMR_BYTE_0] |= (lightsTimers[BLUE][HOURS] & 0b00111110);
-			lightsTimers[BLUE][TMR_BYTE_1] = (byte) ((lightsTimers[BLUE][HOURS] & 0b00000001) << 7);
+			lightsTimers[BLUE][TMR_BYTE_1] = (int) ((lightsTimers[BLUE][HOURS] & 0b00000001) << 7);
 			lightsTimers[BLUE][TMR_BYTE_1] |= (lightsTimers[BLUE][MINS] & 0b01111111);
 		}
 		else if (lightsTimers[BLUE][MINS] != 0)
 		{
-			lightsTimers[BLUE][TMR_BYTE_0] = (byte) (1<<6);
+			lightsTimers[BLUE][TMR_BYTE_0] = (int) (1<<6);
 			lightsTimers[BLUE][TMR_BYTE_0] |= (lightsTimers[BLUE][MINS] & 0b00111110);
-			lightsTimers[BLUE][TMR_BYTE_1] = (byte) ((lightsTimers[BLUE][MINS] & 0b00000001) << 7);
+			lightsTimers[BLUE][TMR_BYTE_1] = (int) ((lightsTimers[BLUE][MINS] & 0b00000001) << 7);
 			lightsTimers[BLUE][TMR_BYTE_1] |= (lightsTimers[BLUE][SECS] & 0b01111111);
 		}
 		else
 		{
-			lightsTimers[BLUE][TMR_BYTE_0] = (byte) (lightsTimers[BLUE][SECS] & 0b00111110);
-			lightsTimers[BLUE][TMR_BYTE_1] = (byte) ((lightsTimers[BLUE][SECS] & 0b00000001) << 7);
-			lightsTimers[BLUE][TMR_BYTE_1] = ((lightsTimers[BLUE][TENTH_OF_MILS] / 10) & 0b01111111);
+			lightsTimers[BLUE][TMR_BYTE_0] = (int) (lightsTimers[BLUE][SECS] & 0b00111110);
+			lightsTimers[BLUE][TMR_BYTE_1] = (int) ((lightsTimers[BLUE][SECS] & 0b00000001) << 7);
+			lightsTimers[BLUE][TMR_BYTE_1] = (int) ((lightsTimers[BLUE][TENTH_OF_MILS] / 10) & 0b01111111);
 		}
 	}
 	
@@ -319,7 +326,7 @@ public class Parameters
 
 	public void setStarryElement(int color, int type, int value)
 	{
-		this.starry[color][type] = value;
+		this.starry[color][type] = (int) value;
 	}
 	
 	public int[][] getLights() {
@@ -396,7 +403,7 @@ public class Parameters
 
 	public void setLightsElement(int color, int type, int value)
 	{
-		this.lights[color][type] = value;
+		this.lights[color][type] = (int) value;
 	}
 	
 	public int getHumidity() {
@@ -483,10 +490,10 @@ public class Parameters
 		ini.put("steamGen", "timer", timer);
 		try 
 		{
-			ini.store(new FileWriter(getClass().getResource(confFilePath).getPath()));
-			System.out.println(Integer.parseInt(ini.get("lights", "redMin")) + " " + 
-							   Integer.parseInt(ini.get("lights", "redMax")) + " " + 
-							   Integer.parseInt(ini.get("lights", "redSpeed")));
+			ini.store(new File(getClass().getResource(confFilePath).getPath()));
+			System.out.println(Integer.valueOf(ini.get("lights", "redMin")) + " " + 
+							   Integer.valueOf(ini.get("lights", "redMax")) + " " + 
+							   Integer.valueOf(ini.get("lights", "redSpeed")));
 		}
 		catch (IOException e)
 		{
@@ -495,11 +502,11 @@ public class Parameters
 	}
 
 	public void setStarryTimers(int color, int item, String value) {
-		this.starryTimers[color][item] = Integer.parseInt(value);
+		this.starryTimers[color][item] = Byte.valueOf(value);
 	}
 
 	public void setLightsTimers(int color, int item, String value) {
-		this.lightsTimers [color][item] = Integer.parseInt(value);
+		this.lightsTimers [color][item] = Byte.valueOf(value);
 	}
 
 	public int[] getStarryManual() {
@@ -510,6 +517,10 @@ public class Parameters
 		this.starryManual = starryManual;
 	}
 
+	public void setStarryManual(int ledId, int value) {
+		this.starryManual[ledId] = (int) value;
+	}
+
 	public int[] getLightsManual() {
 		return lightsManual;
 	}
@@ -518,5 +529,9 @@ public class Parameters
 		this.lightsManual = lightsManual;
 	}
 	
+	public void setLightsManual(int ledId, int value) {
+		this.lightsManual[ledId] = (int) value;
+	}
+
 	
 }

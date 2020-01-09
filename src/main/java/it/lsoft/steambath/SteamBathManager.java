@@ -22,6 +22,7 @@ import javax.swing.JToggleButton;
 
 import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
+import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import it.lsoft.steambath.Commons.Parameters;
 import it.lsoft.steambath.Commons.TimerHandler;
 import it.lsoft.steambath.Commons.VirtualKeyboard;
@@ -30,17 +31,14 @@ import it.lsoft.steambath.Commons.Visualizer;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.JButton;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 
-public class MainWindow 
+import org.apache.log4j.Logger;
+
+public class SteamBathManager 
 	extends JPanel
-	implements  MouseListener, ItemListener, FocusListener, ActionListener, ChangeListener
+	implements  MouseListener, ItemListener, FocusListener, ActionListener
 {
+	final static Logger logger = Logger.getLogger(SteamBathManager.class);
 	Parameters parms = Parameters.getInstance("/conf/config.txt");
 
 	/**
@@ -48,6 +46,9 @@ public class MainWindow
 	 */
 	private static final long serialVersionUID = 1L;
 	private JRadioButton rdbtnLightsAuto, rdbtnLightsManual, rdbtnStarryAuto, rdbtnStarryManual;
+	private JToggleButton starrySaveManual, lightsSaveManual;
+	private JToggleButton tglbtnCabinLights, tglbtnStarrySky;
+	private JToggleButton tglFade;
 	private I2CComm i2c;
 	private Visualizer v;
 	private JTextField starryManRedVal;
@@ -56,12 +57,7 @@ public class MainWindow
 	private JTextField lightsManRedVal;
 	private JTextField lightsManGreenVal;
 	private JTextField lightsManBlueVal;
-	private JSpinner steamTime;
-	private JSpinner humiditySet;
-	private JSpinner fadeStarryTmr;
-	private JSpinner fadeStripeTmr;
-	private JSpinner fadeStarryDuration;
-	private JSpinner fadeStripeDuration;
+	private JWebBrowser wb;
 	private VirtualKeyboard keyb;
 	private boolean valuesChanged = false;
 	private int iniValue;
@@ -72,7 +68,7 @@ public class MainWindow
 	 * @throws IOException 
 	 * @throws UnsupportedBusNumberException 
 	 */
-	public MainWindow(I2CComm i2c) throws UnsupportedBusNumberException, IOException, InterruptedException 
+	public SteamBathManager(I2CComm i2c) throws UnsupportedBusNumberException, IOException, InterruptedException 
 	{
 		this.i2c = i2c;
 		initialize();
@@ -100,83 +96,156 @@ public class MainWindow
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		JLabel settingsIcon = new JLabel(new ImageIcon(myPicture));
-		settingsIcon.setBounds(529, 20, 20, 20);
+		settingsIcon.setBounds(550, 10, 20, 20);
 		settingsIcon.addMouseListener(this);
 		settingsIcon.setName("settings");
 		add(settingsIcon);
 		
-		JLabel lblNewLabel = new JLabel("Steam bath activation menu");
+		JLabel dateAndTime = new JLabel(".");
+		dateAndTime.setFont(new Font("Arsenal", Font.ITALIC, 44));
+		dateAndTime.setBounds(22, 186, 548, 73);
+		add(dateAndTime);
+		TimerHandler tm = new TimerHandler(dateAndTime);
+		tm.start();
+		
+		JLabel lblNewLabel = new JLabel("Edwin Jarvis, here to serve you");
 		lblNewLabel.setFont(new Font("Arsenal", Font.PLAIN, 14));
 		lblNewLabel.setBounds(52, 25, 247, 15);
 		lblNewLabel.addMouseListener(this);
 		lblNewLabel.setName("exitApp");
 		add(lblNewLabel);
-		
-		
-		/*
-		 * Starry Panel
-		 */
-		JPanel pnlStarry = new JPanel();
-		pnlStarry.setBackground(Color.WHITE);
-		pnlStarry.setBorder(new LineBorder(new Color(0, 0, 0)));
-		pnlStarry.setBounds(22, 60, 259, 149);
-		pnlStarry.setLayout(null);
-		add(pnlStarry);
-				
-		JLabel lblStarry = new JLabel("Starry");
-		lblStarry.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblStarry.setBounds(2, 2, 70, 15);
-		pnlStarry.add(lblStarry);
 
+		tglFade = new JToggleButton("Fade");
+		tglFade.setName("fadeLights");
+		tglFade.setForeground(Color.DARK_GRAY);
+		tglFade.setFont(new Font("Dialog", Font.PLAIN, 18));
+		tglFade.setBackground(Color.WHITE);
+		tglFade.setBounds(32, 536, 146, 48);
+		tglFade.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try 
+				{
+					if (tglFade.isSelected())
+					{
+						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
+										I2CComm.LEDRGB_FADE_IN_OUT, false, parms);
+						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
+										I2CComm.LEDRGB_FADE_IN_OUT, true, parms);
+					}
+					else
+					{
+						handleCabinLightsSwitches(tglbtnCabinLights.isSelected());
+						handleStarrySwitches(tglbtnStarrySky.isSelected());
+					}
+				} 
+				catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
+				{
+					// TODO implement logger
+					e1.printStackTrace();
+				}
+			}
+		});
+		add(tglFade);
+
+		wb = new JWebBrowser();
+		wb.setBounds(32, 600, 530, 300);
+		wb.setBarsVisible(false);
+		wb.navigate("https://www.youtube.com/watch?v=lE6RYpe9IT0");
+		wb.setVisible(true);
+		add(wb);
+
+		tglbtnStarrySky = new JToggleButton("Starry sky");
+		tglbtnStarrySky.setForeground(Color.DARK_GRAY);
+		tglbtnStarrySky.setBackground(Color.WHITE);
+		tglbtnStarrySky.setFont(new Font("Arsenal", Font.PLAIN, 18));
+		tglbtnStarrySky.setBounds(32, 295, 146, 48);
+		tglbtnStarrySky.addItemListener(this);
+		tglbtnStarrySky.setName("starryCommand");
+		add(tglbtnStarrySky);
+		
 		JLabel lblStarryManRed = new JLabel("Red");
 		lblStarryManRed.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblStarryManRed.setBounds(135, 8, 41, 33);
-		pnlStarry.add(lblStarryManRed);
+		lblStarryManRed.setBounds(282, 284, 41, 33);
+		add(lblStarryManRed);
 		JLabel lblStarryManGreen = new JLabel("Green");
 		lblStarryManGreen.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblStarryManGreen.setBounds(135, 58, 41, 33);
-		pnlStarry.add(lblStarryManGreen);
+		lblStarryManGreen.setBounds(376, 284, 41, 33);
+		add(lblStarryManGreen);
 		JLabel lblStarryManBlue = new JLabel("Blue");
 		lblStarryManBlue.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblStarryManBlue.setBounds(135, 108, 41, 33);
-		pnlStarry.add(lblStarryManBlue);
+		lblStarryManBlue.setBounds(473, 284, 41, 33);
+		add(lblStarryManBlue);
 		starryManRedVal = new JTextField();
 		starryManRedVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryManRedVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		starryManRedVal.setColumns(10);
-		starryManRedVal.setBounds(190, 8, 48, 33);
+		starryManRedVal.setBounds(316, 284, 48, 33);
 		starryManRedVal.addActionListener(this);
 		starryManRedVal.addFocusListener(this);
 		starryManRedVal.setText(String.valueOf(parms.getStarryManual()[Parameters.RED]));
-		pnlStarry.add(starryManRedVal);
+		add(starryManRedVal);
 		
 		starryManGreenVal = new JTextField();
 		starryManGreenVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryManGreenVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		starryManGreenVal.setColumns(10);
-		starryManGreenVal.setBounds(190, 58, 48, 33);
+		starryManGreenVal.setBounds(417, 284, 48, 33);
 		starryManGreenVal.addActionListener(this);
 		starryManGreenVal.addFocusListener(this);
 		starryManGreenVal.setText(String.valueOf(parms.getStarryManual()[Parameters.GREEN]));
-		pnlStarry.add(starryManGreenVal);
+		add(starryManGreenVal);
 		
 		starryManBlueVal = new JTextField();
 		starryManBlueVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryManBlueVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		starryManBlueVal.setColumns(10);
-		starryManBlueVal.setBounds(190, 108, 48, 33);
+		starryManBlueVal.setBounds(510, 284, 48, 33);
 		starryManBlueVal.addActionListener(this);
 		starryManBlueVal.addFocusListener(this);
 		starryManBlueVal.setText(String.valueOf(parms.getStarryManual()[Parameters.BLUE]));
-		pnlStarry.add(starryManBlueVal);
+		add(starryManBlueVal);
+
+		starrySaveManual = new JToggleButton("Save");
+		starrySaveManual.setName("starrySaveManual");
+		starrySaveManual.setForeground(Color.DARK_GRAY);
+		starrySaveManual.setFont(new Font("Arsenal", Font.PLAIN, 18));
+		starrySaveManual.setBackground(Color.WHITE);
+		starrySaveManual.setBounds(375, 329, 109, 25);
+		starrySaveManual.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (rdbtnStarryManual.isSelected())
+				{
+					parms.setStarryManual(Parameters.RED, Integer.valueOf(starryManRedVal.getText()));
+					parms.setStarryManual(Parameters.GREEN, Integer.valueOf(starryManGreenVal.getText()));
+					parms.setStarryManual(Parameters.BLUE, Integer.valueOf(starryManBlueVal.getText()));
+					parms.save();
+					starrySaveManual.setSelected(false);
+					if (tglbtnStarrySky.isSelected())
+					{
+						try {
+							i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
+											  I2CComm.LEDRGB_SET_BRIGHTNESS, true, parms);
+						}
+						catch(UnsupportedBusNumberException | IOException | InterruptedException e1)
+						{
+							e1.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		add(starrySaveManual);
 		
 		rdbtnStarryAuto = new JRadioButton("Auto");
 		rdbtnStarryAuto.setForeground(Color.DARK_GRAY);
 		rdbtnStarryAuto.setBackground(Color.WHITE);
 		rdbtnStarryAuto.setSelected(true);
 		rdbtnStarryAuto.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		rdbtnStarryAuto.setBounds(20, 35, 87, 23);
+		rdbtnStarryAuto.setBounds(189, 291, 149, 23);
 		rdbtnStarryAuto.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -186,20 +255,36 @@ public class MainWindow
 				starryManRedVal.setVisible(false);
 				starryManGreenVal.setVisible(false);
 				starryManBlueVal.setVisible(false);
+				starrySaveManual.setVisible(false);
 				if (valuesChanged)
 				{
 					parms.save();
 					valuesChanged = false;
 				}
+				if (tglbtnStarrySky.isSelected())
+				{
+					try 
+					{
+						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
+								I2CComm.LEDRGB_SET_TIMERS, true, parms);
+						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
+								I2CComm.LEDRGB_SET_AUTO, true, parms);
+					}
+					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
+					{
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
-		pnlStarry.add(rdbtnStarryAuto);
+		add(rdbtnStarryAuto);
 		
 		rdbtnStarryManual = new JRadioButton("Manual");
 		rdbtnStarryManual.setForeground(Color.DARK_GRAY);
 		rdbtnStarryManual.setBackground(Color.WHITE);
 		rdbtnStarryManual.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		rdbtnStarryManual.setBounds(20, 80, 87, 23);
+		rdbtnStarryManual.setBounds(189, 325, 87, 23);
 		rdbtnStarryManual.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -209,78 +294,117 @@ public class MainWindow
 				starryManRedVal.setVisible(true);
 				starryManGreenVal.setVisible(true);
 				starryManBlueVal.setVisible(true);
+				starrySaveManual.setVisible(true);
+				if (tglbtnStarrySky.isSelected())
+				{
+					try 
+					{
+						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
+								I2CComm.LEDRGB_SET_MANUAL, true, parms);	
+					}
+					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
+					{
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
-		pnlStarry.add(rdbtnStarryManual);
+		add(rdbtnStarryManual);
 		
 		ButtonGroup bgStarry = new ButtonGroup();    
 		bgStarry.add(rdbtnStarryAuto);
 		bgStarry.add(rdbtnStarryManual);
 		
-		/*
-		 * Stripe Panel
-		 */
-		JPanel pnlStripe = new JPanel();
-		pnlStripe.setBorder(new LineBorder(new Color(0, 0, 0)));
-		pnlStripe.setBackground(Color.WHITE);
-		pnlStripe.setBounds(293, 60, 259, 149);
-		pnlStripe.setLayout(null);
-		add(pnlStripe);
-		
-		JLabel lblStripe = new JLabel("Stripe");
-		lblStripe.setBounds(2, 2, 65, 17);
-		lblStripe.setFont(new Font("Dialog", Font.BOLD, 14));
-		pnlStripe.add(lblStripe);
+		tglbtnCabinLights = new JToggleButton("Cabin lights");
+		tglbtnCabinLights.setForeground(Color.DARK_GRAY);
+		tglbtnCabinLights.setBackground(Color.WHITE);
+		tglbtnCabinLights.setFont(new Font("Arsenal", Font.PLAIN, 18));
+		tglbtnCabinLights.setBounds(32, 403, 146, 48);
+		tglbtnCabinLights.addItemListener(this);
+		tglbtnCabinLights.setName("lightsCommand");
+		add(tglbtnCabinLights);
 		
 		JLabel lblLightsManRed = new JLabel("Red");
 		lblLightsManRed.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblLightsManRed.setBounds(140, 8, 41, 33);
-		pnlStripe.add(lblLightsManRed);
+		lblLightsManRed.setBounds(282, 403, 41, 33);
+		add(lblLightsManRed);
 		JLabel lblLightsManGreen = new JLabel("Green");
 		lblLightsManGreen.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblLightsManGreen.setBounds(140, 58, 41, 33);
-		pnlStripe.add(lblLightsManGreen);
+		lblLightsManGreen.setBounds(376, 403, 41, 33);
+		add(lblLightsManGreen);
 		JLabel lblLightsManBlue = new JLabel("Blue");
 		lblLightsManBlue.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblLightsManBlue.setBounds(140, 108, 41, 33);
-		pnlStripe.add(lblLightsManBlue);
-		
+		lblLightsManBlue.setBounds(473, 403, 41, 33);
+		add(lblLightsManBlue);
 		lightsManRedVal = new JTextField();
 		lightsManRedVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsManRedVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		lightsManRedVal.setColumns(10);
-		lightsManRedVal.setBounds(190, 8, 48, 33);
+		lightsManRedVal.setBounds(316, 403, 48, 33);
 		lightsManRedVal.addActionListener(this);
 		lightsManRedVal.addFocusListener(this);
 		lightsManRedVal.setText(String.valueOf(parms.getLightsManual()[Parameters.RED]));
-		pnlStripe.add(lightsManRedVal);
+		add(lightsManRedVal);
 
 		lightsManGreenVal = new JTextField();
 		lightsManGreenVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsManGreenVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		lightsManGreenVal.setColumns(10);
-		lightsManGreenVal.setBounds(190, 58, 48, 33);
+		lightsManGreenVal.setBounds(417, 403, 48, 33);
 		lightsManGreenVal.addActionListener(this);
 		lightsManGreenVal.addFocusListener(this);
 		lightsManGreenVal.setText(String.valueOf(parms.getLightsManual()[Parameters.GREEN]));
-		pnlStripe.add(lightsManGreenVal);
+		add(lightsManGreenVal);
 
 		lightsManBlueVal = new JTextField();
 		lightsManBlueVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsManBlueVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		lightsManBlueVal.setColumns(10);
-		lightsManBlueVal.setBounds(190, 108, 48, 33);
+		lightsManBlueVal.setBounds(510, 403, 48, 33);
 		lightsManBlueVal.addActionListener(this);
 		lightsManBlueVal.addFocusListener(this);
 		lightsManBlueVal.setText(String.valueOf(parms.getLightsManual()[Parameters.BLUE]));
-		pnlStripe.add(lightsManBlueVal);
+		add(lightsManBlueVal);
+		
+		lightsSaveManual = new JToggleButton("Save");
+		lightsSaveManual.setName("lightsSaveManual");
+		lightsSaveManual.setForeground(Color.DARK_GRAY);
+		lightsSaveManual.setFont(new Font("Arsenal", Font.PLAIN, 18));
+		lightsSaveManual.setBackground(Color.WHITE);
+		lightsSaveManual.setBounds(375, 448, 109, 25);
+		lightsSaveManual.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (rdbtnLightsManual.isSelected())
+				{
+					parms.setLightsManual(Parameters.RED, Integer.valueOf(lightsManRedVal.getText()));
+					parms.setLightsManual(Parameters.GREEN, Integer.valueOf(lightsManGreenVal.getText()));
+					parms.setLightsManual(Parameters.BLUE, Integer.valueOf(lightsManBlueVal.getText()));
+					parms.save();
+					lightsSaveManual.setSelected(false);
+					if (tglbtnCabinLights.isSelected())
+					{
+						try {
+							i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
+											  I2CComm.LEDRGB_SET_BRIGHTNESS, true, parms);
+						}
+						catch(UnsupportedBusNumberException | IOException | InterruptedException e1)
+						{
+							e1.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		add(lightsSaveManual);
 
 		rdbtnLightsAuto = new JRadioButton("Auto");
 		rdbtnLightsAuto.setForeground(Color.DARK_GRAY);
 		rdbtnLightsAuto.setBackground(Color.WHITE);
 		rdbtnLightsAuto.setSelected(true);
 		rdbtnLightsAuto.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		rdbtnLightsAuto.setBounds(20, 35, 87, 23);
+		rdbtnLightsAuto.setBounds(189, 403, 149, 23);
 		rdbtnLightsAuto.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -290,20 +414,36 @@ public class MainWindow
 				lightsManRedVal.setVisible(false);
 				lightsManGreenVal.setVisible(false);
 				lightsManBlueVal.setVisible(false);
+				lightsSaveManual.setVisible(false);
 				if (valuesChanged)
 				{
 					parms.save();
 					valuesChanged = false;
 				}
+				if (tglbtnCabinLights.isSelected())
+				{
+					try 
+					{
+						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
+								I2CComm.LEDRGB_SET_TIMERS, true, parms);
+						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
+								I2CComm.LEDRGB_SET_AUTO, true, parms);
+					}
+					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
+					{
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
-		pnlStripe.add(rdbtnLightsAuto);
+		add(rdbtnLightsAuto);
 		
 		rdbtnLightsManual = new JRadioButton("Manual");
 		rdbtnLightsManual.setForeground(Color.DARK_GRAY);
 		rdbtnLightsManual.setBackground(Color.WHITE);
 		rdbtnLightsManual.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		rdbtnLightsManual.setBounds(20, 80, 87, 23);
+		rdbtnLightsManual.setBounds(189, 436, 87, 23);
 		rdbtnLightsManual.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -313,114 +453,28 @@ public class MainWindow
 				lightsManRedVal.setVisible(true);
 				lightsManGreenVal.setVisible(true);
 				lightsManBlueVal.setVisible(true);
+				lightsSaveManual.setVisible(true);
+				if (tglbtnCabinLights.isSelected())
+				{
+					try 
+					{
+						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
+								I2CComm.LEDRGB_SET_MANUAL, true, parms);	
+					}
+					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
+					{
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
-		pnlStripe.add(rdbtnLightsManual);
+		add(rdbtnLightsManual);
 
 		ButtonGroup bgLights = new ButtonGroup();    
 		bgLights.add(rdbtnLightsAuto);
 		bgLights.add(rdbtnLightsManual);
 		
-		/*
-		 * Time and humidity panel
-		 */
-		JPanel pnlOtherParms = new JPanel();
-		pnlOtherParms.setForeground(Color.BLACK);
-		pnlOtherParms.setBorder(new LineBorder(new Color(0, 0, 0)));
-		pnlOtherParms.setBackground(Color.WHITE);
-		pnlOtherParms.setBounds(22, 221, 530, 143);
-		pnlOtherParms.setLayout(null);
-		add(pnlOtherParms);
-
-		JLabel lblTimeAndHumidity = new JLabel("Other parameters");
-		lblTimeAndHumidity.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblTimeAndHumidity.setBounds(2, 2, 175, 15);
-		pnlOtherParms.add(lblTimeAndHumidity);
-		
-		JLabel lblsteamTime = new JLabel("Time");
-		lblsteamTime.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblsteamTime.setBounds(20, 50, 50, 15);
-		pnlOtherParms.add(lblsteamTime);
-		JLabel lblsteamHumidity = new JLabel("Humidity");
-		lblsteamHumidity.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblsteamHumidity.setBounds(20, 100, 50, 15);
-		pnlOtherParms.add(lblsteamHumidity);
-		steamTime = new JSpinner();
-		steamTime.setModel(new SpinnerNumberModel(35, 35, 60, 5));
-		steamTime.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		steamTime.setBounds(75, 41, 48, 33);
-		steamTime.addChangeListener(this);
-		steamTime.addFocusListener(this);
-		pnlOtherParms.add(steamTime );
-		humiditySet = new JSpinner();
-		humiditySet.setModel(new SpinnerNumberModel(50, 50, 90, 5));
-		humiditySet.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		humiditySet.setBounds(75, 91, 48, 33);
-		humiditySet.addFocusListener(this);
-		pnlOtherParms.add(humiditySet);
-		
-		JLabel lblFadeCycle = new JLabel("Fade:    cycle");
-		lblFadeCycle.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblFadeCycle.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblFadeCycle.setBounds(167, 20, 80, 15);
-		pnlOtherParms.add(lblFadeCycle);
-		JLabel lblFadeStripeTmr = new JLabel("Stripe");
-		lblFadeStripeTmr.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblFadeStripeTmr.setBounds(160, 50, 80, 15);
-		pnlOtherParms.add(lblFadeStripeTmr);
-		JLabel lblFadeStarryTmr = new JLabel("Starry");
-		lblFadeStarryTmr.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblFadeStarryTmr.setBounds(160, 100, 80, 15);
-		pnlOtherParms.add(lblFadeStarryTmr);
-		fadeStripeTmr = new JSpinner();
-		fadeStripeTmr.setModel(new SpinnerNumberModel(35, 35, 60, 5));
-		fadeStripeTmr.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		fadeStripeTmr.setBounds(200, 41, 48, 33);
-		fadeStripeTmr.addFocusListener(this);
-		pnlOtherParms.add(fadeStripeTmr);
-		fadeStarryTmr = new JSpinner();
-		fadeStarryTmr.setModel(new SpinnerNumberModel(50, 50, 90, 5));
-		fadeStarryTmr.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		fadeStarryTmr.setBounds(200, 91, 48, 33);
-		fadeStarryTmr.addFocusListener(this);
-		pnlOtherParms.add(fadeStarryTmr);
-
-		JLabel lblFadeDuration = new JLabel("duration");
-		lblFadeDuration.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblFadeDuration.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblFadeDuration.setBounds(250, 20, 58, 15);
-		pnlOtherParms.add(lblFadeDuration);
-		fadeStripeDuration = new JSpinner();
-		fadeStripeDuration.setModel(new SpinnerNumberModel(35, 35, 60, 5));
-		fadeStripeDuration.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		fadeStripeDuration.setBounds(260, 41, 48, 33);
-		pnlOtherParms.add(fadeStripeDuration);
-		fadeStarryDuration = new JSpinner();
-		fadeStarryDuration.setModel(new SpinnerNumberModel(50, 50, 90, 5));
-		fadeStarryDuration.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		fadeStarryDuration.setBounds(260, 91, 48, 33);
-		pnlOtherParms.add(fadeStarryDuration);
-		
-		/*
-		 * Music
-		 */
-		JPanel pnlMusic= new JPanel();
-		pnlMusic.setForeground(Color.BLACK);
-		pnlMusic.setBorder(new LineBorder(new Color(0, 0, 0)));
-		pnlMusic.setBackground(Color.WHITE);
-		pnlMusic.setBounds(22, 377, 530, 143);
-		pnlMusic.setLayout(null);
-		add(pnlMusic);
-
-		
-		JButton btnNewButton = new JButton("Start");
-		btnNewButton.setBounds(172, 708, 247, 48);
-		add(btnNewButton);
-		
-		
-
-
-
 		lblStarryManRed.setVisible(false);
 		lblStarryManGreen.setVisible(false);
 		lblStarryManBlue.setVisible(false);
@@ -433,6 +487,8 @@ public class MainWindow
 		lightsManRedVal.setVisible(false);
 		lightsManGreenVal.setVisible(false);
 		lightsManBlueVal.setVisible(false);
+		starrySaveManual.setVisible(false);
+		lightsSaveManual.setVisible(false);
 	}
 	
 	@Override
@@ -444,7 +500,7 @@ public class MainWindow
 			switch(source.getName())
 			{
 			case "settings":
-				((JPanel) v.getFrame("mw")).setVisible(false);
+				((JPanel) v.getFrame("sm")).setVisible(false);
 				((JPanel) v.getFrame("conf")).setVisible(true);
 				
 				break;
@@ -481,9 +537,9 @@ public class MainWindow
 	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
-		Parameters parms = Parameters.getInstance("/conf/config.txt");
+		logger.trace("Entering itemStateCHanged");
 		boolean request = false;
-		if (e.getSource().getClass().getName().compareTo("javax.swing.JToggleButton") == 0)
+		if ((e.getSource().getClass().getName().compareTo("javax.swing.JToggleButton") == 0) && !tglFade.isSelected())		
 		{
 			if(e.getStateChange()==ItemEvent.SELECTED)
 			{
@@ -496,49 +552,73 @@ public class MainWindow
 			JToggleButton source = (JToggleButton)e.getSource();
 			if (source.getName().compareTo("starryCommand") == 0)
 			{
-				try 
-				{
-					if (rdbtnStarryManual.isSelected())
-					{
-						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
-								I2CComm.LEDRGB_SET_MANUAL, request, parms);
-					}
-					else
-					{
-						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
-								I2CComm.LEDRGB_SET_AUTO, request, parms);
-					}
-				} 
-				catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				handleStarrySwitches(request);
 			}
 			else if (source.getName().compareTo("lightsCommand") == 0)
 			{
-				try 
-				{
-					if (rdbtnLightsManual.isSelected())
-					{
-						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
-								I2CComm.LEDRGB_SET_MANUAL, request, parms);
-					}
-					else
-					{
-						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
-								I2CComm.LEDRGB_SET_AUTO, request, parms);
-					}
-				} 
-				catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				handleCabinLightsSwitches(request);
 			}
 		}
 	}
-
+	private void handleStarrySwitches(boolean request)
+	{
+		Parameters parms = Parameters.getInstance("/conf/config.txt");
+		try 
+		{
+			if (tglbtnStarrySky.isSelected())
+			{
+				if (rdbtnStarryAuto.isSelected())
+				{
+					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
+							I2CComm.LEDRGB_SET_TIMERS, true, parms);
+					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
+							I2CComm.LEDRGB_SET_AUTO, true, parms);
+				}
+				else if (rdbtnStarryManual.isSelected())
+				{
+					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
+							I2CComm.LEDRGB_SET_MANUAL, true, parms);	
+				}
+			}
+			i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
+					I2CComm.LEDRGB_SWITCH_ON_OFF, request, parms);
+		} 
+		catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
+	private void handleCabinLightsSwitches(boolean request)
+	{
+		Parameters parms = Parameters.getInstance("/conf/config.txt");
+		try 
+		{
+			if (tglbtnCabinLights.isSelected())
+			{
+				if (rdbtnLightsAuto.isSelected())
+				{
+					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
+							I2CComm.LEDRGB_SET_TIMERS, true, parms);
+					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
+							I2CComm.LEDRGB_SET_AUTO, true, parms);
+				}
+				else if (rdbtnLightsManual.isSelected())
+				{
+					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
+							I2CComm.LEDRGB_SET_MANUAL, true, parms);
+				}
+			}
+			i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
+							I2CComm.LEDRGB_SWITCH_ON_OFF, request, parms);
+		} 
+		catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
@@ -579,15 +659,5 @@ public class MainWindow
 			keyb.setVisible(true);
 			keyb.dispose();
 		}
-	}
-
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		if (keyb != null)
-		{
-			keyb.setVisible(true);
-			keyb.dispose();
-		}
-		
 	}
 }
