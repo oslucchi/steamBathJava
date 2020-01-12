@@ -65,7 +65,8 @@ public class MainWindow
 	private VirtualKeyboard keyb;
 	private boolean valuesChanged = false;
 	private int iniValue;
-	
+	private byte[] request = new byte[4];
+
 	/**
 	 * Create the application.
 	 * @throws InterruptedException 
@@ -482,16 +483,15 @@ public class MainWindow
 	public void itemStateChanged(ItemEvent e)
 	{
 		Parameters parms = Parameters.getInstance("/conf/config.txt");
-		boolean request = false;
 		if (e.getSource().getClass().getName().compareTo("javax.swing.JToggleButton") == 0)
 		{
 			if(e.getStateChange()==ItemEvent.SELECTED)
 			{
-				request = true;
+				request[0] = 1;
 			} 
 			else if(e.getStateChange()==ItemEvent.DESELECTED)
 			{
-				request = false;
+				request[0] = 0;
 			}		
 			JToggleButton source = (JToggleButton)e.getSource();
 			if (source.getName().compareTo("starryCommand") == 0)

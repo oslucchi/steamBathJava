@@ -72,6 +72,21 @@
 		<artifactId>ini4j</artifactId>
 		<version>0.5.1</version>
 	</dependency>
+<!-- 
+	<dependency>
+		<groupId>DJNativeSwing</groupId>
+		<artifactId>DJNativeSwing</artifactId>
+		<scope>system</scope>
+		<version>1.0</version>
+		<systemPath>${basedir}/extlib/DJNativeSwing.jar</systemPath>
+	</dependency>
+	<dependency>
+		<groupId>DJNativeSwing-SWT</groupId>
+		<artifactId>DJNativeSwing-SWT</artifactId>
+		<scope>system</scope>
+		<version>1.0</version>
+		<systemPath>${basedir}/extlib/DJNativeSwing-SWT.jar</systemPath>
+	</dependency>	
 	<dependency>
 	    <groupId>org.eclipse.swt.org.eclipse.swt.gtk.linux.x86_64.4.3.swt</groupId>
 	    <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
@@ -82,19 +97,6 @@
 	    <artifactId>jna</artifactId>
 	    <version>3.0.9</version>
 	</dependency>
-	<dependency>
-		<groupId>DJNativeSwing</groupId>
-		<artifactId>DJNativeSwing</artifactId>
-		<scope>system</scope>
-		<version>1.0</version>
-		<systemPath>${basedir}/extlib/DJNativeSwing.jar</systemPath>
-	</dependency>	
-	<dependency>
-		<groupId>DJNativeSwing-SWT</groupId>
-		<artifactId>DJNativeSwing-SWT</artifactId>
-		<scope>system</scope>
-		<version>1.0</version>
-		<systemPath>${basedir}/extlib/DJNativeSwing-SWT.jar</systemPath>
-	</dependency>	
+ -->	
   </dependencies>
 </project>

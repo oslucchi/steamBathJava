@@ -40,6 +40,8 @@ public class Parameters
 	int temperature = 40;
 	int timer = 30;
 	
+	int[] lightsFadeTimer = new int[2];
+	
 	private static Parameters instance = null;
 	private static String confFilePath = null;
 	private Ini ini = null;
@@ -143,6 +145,15 @@ public class Parameters
 		humidity = Integer.parseUnsignedInt(ini.get("steamGen", "humidity"));
 		temperature = Integer.parseUnsignedInt(ini.get("steamGen", "temperature"));
 		timer = Integer.parseUnsignedInt(ini.get("steamGen", "timer"));
+		
+		if ((lightsFadeTimer[0] = Integer.parseInt(ini.get("fade", "timerIn"))) > 128*60)
+		{
+			lightsFadeTimer[0] = 128*60; 
+		}
+		if ((lightsFadeTimer[1] = Integer.parseInt(ini.get("fade", "timerOut"))) < 60)
+		{
+			lightsFadeTimer[1] = 60; 
+		}
 	}
 
 	public void setTimers()
@@ -256,7 +267,7 @@ public class Parameters
 		{
 			lightsTimers[RED][TMR_BYTE_0] = (int) (lightsTimers[RED][SECS] & 0b00111110);
 			lightsTimers[RED][TMR_BYTE_1] = (int) ((lightsTimers[RED][SECS] & 0b00000001) << 7);
-			lightsTimers[RED][TMR_BYTE_1] = (int) ((lightsTimers[RED][TENTH_OF_MILS] / 10) & 0b01111111);
+			lightsTimers[RED][TMR_BYTE_1] |= (int) ((lightsTimers[RED][TENTH_OF_MILS] / 10) & 0b01111111);
 		}
 
 		if (lightsTimers[GREEN][DAYS] != 0)
@@ -284,7 +295,7 @@ public class Parameters
 		{
 			lightsTimers[GREEN][TMR_BYTE_0] = (int) (lightsTimers[GREEN][SECS] & 0b00111110);
 			lightsTimers[GREEN][TMR_BYTE_1] = (int) ((lightsTimers[GREEN][SECS] & 0b00000001) << 7);
-			lightsTimers[GREEN][TMR_BYTE_1] = (int) ((lightsTimers[GREEN][TENTH_OF_MILS] / 10) & 0b01111111);
+			lightsTimers[GREEN][TMR_BYTE_1] |= (int) ((lightsTimers[GREEN][TENTH_OF_MILS] / 10) & 0b01111111);
 		}
 
 		if (lightsTimers[BLUE][DAYS] != 0)
@@ -312,7 +323,7 @@ public class Parameters
 		{
 			lightsTimers[BLUE][TMR_BYTE_0] = (int) (lightsTimers[BLUE][SECS] & 0b00111110);
 			lightsTimers[BLUE][TMR_BYTE_1] = (int) ((lightsTimers[BLUE][SECS] & 0b00000001) << 7);
-			lightsTimers[BLUE][TMR_BYTE_1] = (int) ((lightsTimers[BLUE][TENTH_OF_MILS] / 10) & 0b01111111);
+			lightsTimers[BLUE][TMR_BYTE_1] |= (int) ((lightsTimers[BLUE][TENTH_OF_MILS] / 10) & 0b01111111);
 		}
 	}
 	
@@ -533,5 +544,8 @@ public class Parameters
 		this.lightsManual[ledId] = (int) value;
 	}
 
+	public int[] getLightsFadeTimers() {
+		return lightsFadeTimer;
+	}
 	
 }

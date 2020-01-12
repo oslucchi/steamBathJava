@@ -49,7 +49,7 @@ public class I2CComm {
     private byte[] readBuffer = new byte[256];
     private byte[] writeBuffer = new byte[256];
 
-    public boolean prepareCommand(byte deviceId, byte unityId, byte cmdId, boolean request, Parameters parms) 
+    public boolean prepareCommand(byte deviceId, byte unityId, byte cmdId, byte[] request, Parameters parms) 
     		throws UnsupportedBusNumberException, IOException, InterruptedException
     {
     	byte len = -1;
@@ -130,7 +130,7 @@ public class I2CComm {
 			
 		case LEDRGB_SWITCH_ON_OFF:
 			len = 4;
-			command[4] = (byte) (request ? 1 : 0);
+			command[4] = request[0];
 			break;
 			
 		case LEDRGB_SET_SPEED:
@@ -172,7 +172,13 @@ public class I2CComm {
 
 		case LEDRGB_FADE_IN_OUT:
 			len = 4;
-			command[4] = (byte) (request ? 1 : 0);
+			dummyAr = parms.getLightsFadeTimers();
+			command[4] = request[0];
+			command[5] = request[1];
+			command[6] = (byte) ((1 << 6) | (dummyAr[0] >> 1) & 0b00111111) ;
+			command[7] = (byte) ((dummyAr[0] | 0b00000001) << 7); 
+			command[8] = (byte) ((1 << 6) | (dummyAr[1] >> 1) & 0b00111111) ;
+			command[9] = (byte) ((dummyAr[1] | 0b00000001) << 7); 
 			break;	
 		}
 		command[1] = len;
@@ -191,6 +197,7 @@ public class I2CComm {
 		}
 		catch(Exception e)
 		{
+			logger.error("Exception: " + e.getMessage() + " writing msg to ctrl " + deviceId);
 			return false;
 		}
     }
@@ -248,8 +255,9 @@ public class I2CComm {
     	{
 	        I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
 	
-	        starry = i2c.getDevice(I2C_LIGHTS_AND_STEAM);
-	        lights = i2c.getDevice(I2C_WATER_AND_FANS);
+	        // starry = i2c.getDevice(I2C_LIGHTS_AND_STEAM);
+	        lights = i2c.getDevice(I2C_LIGHTS_AND_STEAM);
+	        
     	}
     	else
     	{
@@ -264,28 +272,30 @@ public class I2CComm {
 
 		byte[] readBuffer = new byte[128];
 		
-		if (cmd[0] == CTRLID_STARRYSKY)
-		{
-			ctrl = starry;
-		}
-		else if (cmd[0] == CTRLID_RGBSTRIPE)
-		{
-			ctrl = lights;
-		}
+//		if (cmd[0] == CTRLID_STARRYSKY)
+//		{
+//			ctrl = starry;
+//		}
+//		else if (cmd[0] == CTRLID_RGBSTRIPE)
+//		{
+//			ctrl = lights;
+//		}
+		ctrl = lights;
 
-		System.out.println("writing a total of " + cmd[1] + " bytes.");
+		logger.trace("writing a total of " + cmd[1] + " bytes.");
 		try
 		{
 			ctrl.write(cmd, 1, cmd[1]);
 		}
 		catch(IOException e)
 		{
-			e.printStackTrace();
+			logger.error("Exception: " + e.getMessage() + ", trace:");
+			logger.error(e);
 		}
 
 		Thread.sleep(1000);
 		int bytesRead = 0;
-    	System.out.println("Going to receive message.");
+		logger.trace("Going to receive message.");
     	boolean pendingHdr = true;
     	int doItAgain = 0;
 		do {
@@ -300,16 +310,16 @@ public class I2CComm {
 
 	    	if (bytesRead < 2)
     		{
-    			System.out.println("Something went wrong... restarting");
+	    		logger.error("Something went wrong... restarting");
     			return false;
     		}
     		else
     		{
-		    	System.out.println("Message received. Status is " + ((int)readBuffer[1]));
+    			logger.trace("Message received. Status is " + ((int)readBuffer[1]));
 	    		switch(readBuffer[1])
 	    		{
 	    		case (byte) 0xFF:
-	    			System.out.println("Rejection received");
+	    			logger.trace("Rejection received");
 	    		case 0:
 	    			pendingHdr = false;
 	    			break;
@@ -318,12 +328,12 @@ public class I2CComm {
 	    			// Wait for an answer
 	    			if (++doItAgain == 10)
 	    			{
-		    			System.out.println("No answer received, command aborted");
+	    				logger.error("No answer received, command aborted");
 		    			pendingHdr = false;
 	    			}
 	    			else
 					{
-		    			System.out.println("No answer ready yet, keep pushing");
+	    				logger.trace("No answer ready yet, keep pushing");
 	    				Thread.sleep(300);
 					}
 	    			break;
@@ -333,12 +343,13 @@ public class I2CComm {
 		
 		if (readBuffer[0] > 2)
 		{
-    		System.out.println("Reading response " + readBuffer[0] + " bytes long");
+			String msg = "";
+			logger.trace("Reading response " + readBuffer[0] + " bytes long");
     		for(int i = 0; i < readBuffer[0]; i++)
     		{
-    			System.out.print(" " + String.format("0x%02X", readBuffer[i]));
+    			msg += " " + String.format("0x%02X", readBuffer[i]);
 			}
-    		System.out.println();
+    		logger.trace("Response is: '" + msg + "'");
 		}
 		return true;
     }

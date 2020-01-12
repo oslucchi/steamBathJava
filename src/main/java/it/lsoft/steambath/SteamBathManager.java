@@ -22,7 +22,7 @@ import javax.swing.JToggleButton;
 
 import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+// import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import it.lsoft.steambath.Commons.Parameters;
 import it.lsoft.steambath.Commons.TimerHandler;
 import it.lsoft.steambath.Commons.VirtualKeyboard;
@@ -57,10 +57,11 @@ public class SteamBathManager
 	private JTextField lightsManRedVal;
 	private JTextField lightsManGreenVal;
 	private JTextField lightsManBlueVal;
-	private JWebBrowser wb;
+//	private JWebBrowser wb;
 	private VirtualKeyboard keyb;
 	private boolean valuesChanged = false;
 	private int iniValue;
+	private byte[] request = new byte[4];
 	
 	/**
 	 * Create the application.
@@ -130,15 +131,25 @@ public class SteamBathManager
 				{
 					if (tglFade.isSelected())
 					{
+						request[0] = 1;
+						request[1] = 1;
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
-										I2CComm.LEDRGB_FADE_IN_OUT, false, parms);
+										I2CComm.LEDRGB_FADE_IN_OUT, request, parms);
+						request[1] = 2;
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
-										I2CComm.LEDRGB_FADE_IN_OUT, true, parms);
+										I2CComm.LEDRGB_FADE_IN_OUT, request, parms);
 					}
 					else
 					{
-						handleCabinLightsSwitches(tglbtnCabinLights.isSelected());
-						handleStarrySwitches(tglbtnStarrySky.isSelected());
+						request[0] = 0;
+						request[1] = 1;
+						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
+										I2CComm.LEDRGB_FADE_IN_OUT, request, parms);
+						request[1] = 2;
+						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
+										I2CComm.LEDRGB_FADE_IN_OUT, request, parms);
+//						handleCabinLightsSwitches(tglbtnCabinLights.isSelected());
+//						handleStarrySwitches(tglbtnStarrySky.isSelected());
 					}
 				} 
 				catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
@@ -150,12 +161,12 @@ public class SteamBathManager
 		});
 		add(tglFade);
 
-		wb = new JWebBrowser();
-		wb.setBounds(32, 600, 530, 300);
-		wb.setBarsVisible(false);
-		wb.navigate("https://www.youtube.com/watch?v=lE6RYpe9IT0");
-		wb.setVisible(true);
-		add(wb);
+//		wb = new JWebBrowser();
+//		wb.setBounds(32, 600, 530, 300);
+//		wb.setBarsVisible(false);
+//		wb.navigate("https://www.youtube.com/watch?v=lE6RYpe9IT0");
+//		wb.setVisible(true);
+//		add(wb);
 
 		tglbtnStarrySky = new JToggleButton("Starry sky");
 		tglbtnStarrySky.setForeground(Color.DARK_GRAY);
@@ -227,8 +238,9 @@ public class SteamBathManager
 					if (tglbtnStarrySky.isSelected())
 					{
 						try {
+							request[0] = 1;
 							i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
-											  I2CComm.LEDRGB_SET_BRIGHTNESS, true, parms);
+											  I2CComm.LEDRGB_SET_BRIGHTNESS, request, parms);
 						}
 						catch(UnsupportedBusNumberException | IOException | InterruptedException e1)
 						{
@@ -265,10 +277,11 @@ public class SteamBathManager
 				{
 					try 
 					{
+						request[0] = 1;
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
-								I2CComm.LEDRGB_SET_TIMERS, true, parms);
+								I2CComm.LEDRGB_SET_TIMERS, request, parms);
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
-								I2CComm.LEDRGB_SET_AUTO, true, parms);
+								I2CComm.LEDRGB_SET_AUTO, request, parms);
 					}
 					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 					{
@@ -299,8 +312,9 @@ public class SteamBathManager
 				{
 					try 
 					{
+						request[0] = 1;
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
-								I2CComm.LEDRGB_SET_MANUAL, true, parms);	
+								I2CComm.LEDRGB_SET_MANUAL, request, parms);	
 					}
 					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 					{
@@ -386,8 +400,9 @@ public class SteamBathManager
 					if (tglbtnCabinLights.isSelected())
 					{
 						try {
+							request[0] = 1;
 							i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
-											  I2CComm.LEDRGB_SET_BRIGHTNESS, true, parms);
+											  I2CComm.LEDRGB_SET_BRIGHTNESS, request, parms);
 						}
 						catch(UnsupportedBusNumberException | IOException | InterruptedException e1)
 						{
@@ -424,10 +439,11 @@ public class SteamBathManager
 				{
 					try 
 					{
+						request[0] = 1;
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
-								I2CComm.LEDRGB_SET_TIMERS, true, parms);
+								I2CComm.LEDRGB_SET_TIMERS, request, parms);
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
-								I2CComm.LEDRGB_SET_AUTO, true, parms);
+								I2CComm.LEDRGB_SET_AUTO, request, parms);
 					}
 					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 					{
@@ -458,8 +474,9 @@ public class SteamBathManager
 				{
 					try 
 					{
+						request[0] = 1;
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
-								I2CComm.LEDRGB_SET_MANUAL, true, parms);	
+								I2CComm.LEDRGB_SET_MANUAL, request, parms);	
 					}
 					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 					{
@@ -560,26 +577,28 @@ public class SteamBathManager
 			}
 		}
 	}
-	private void handleStarrySwitches(boolean request)
+	private void handleStarrySwitches(boolean b)
 	{
 		Parameters parms = Parameters.getInstance("/conf/config.txt");
 		try 
 		{
 			if (tglbtnStarrySky.isSelected())
 			{
+				request[0] = 1;
 				if (rdbtnStarryAuto.isSelected())
 				{
 					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
-							I2CComm.LEDRGB_SET_TIMERS, true, parms);
+							I2CComm.LEDRGB_SET_TIMERS, request, parms);
 					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
-							I2CComm.LEDRGB_SET_AUTO, true, parms);
+							I2CComm.LEDRGB_SET_AUTO, request, parms);
 				}
 				else if (rdbtnStarryManual.isSelected())
 				{
 					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
-							I2CComm.LEDRGB_SET_MANUAL, true, parms);	
+							I2CComm.LEDRGB_SET_MANUAL, request, parms);	
 				}
 			}
+			request[0] = (byte) (b ? 1 : 0);
 			i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
 					I2CComm.LEDRGB_SWITCH_ON_OFF, request, parms);
 		} 
@@ -590,26 +609,28 @@ public class SteamBathManager
 		}
 	}
 	
-	private void handleCabinLightsSwitches(boolean request)
+	private void handleCabinLightsSwitches(boolean b)
 	{
 		Parameters parms = Parameters.getInstance("/conf/config.txt");
 		try 
 		{
+			request[0] = 1;
 			if (tglbtnCabinLights.isSelected())
 			{
 				if (rdbtnLightsAuto.isSelected())
 				{
 					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
-							I2CComm.LEDRGB_SET_TIMERS, true, parms);
+							I2CComm.LEDRGB_SET_TIMERS, request, parms);
 					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
-							I2CComm.LEDRGB_SET_AUTO, true, parms);
+							I2CComm.LEDRGB_SET_AUTO, request, parms);
 				}
 				else if (rdbtnLightsManual.isSelected())
 				{
 					i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
-							I2CComm.LEDRGB_SET_MANUAL, true, parms);
+							I2CComm.LEDRGB_SET_MANUAL, request, parms);
 				}
 			}
+			request[0] = (byte) (b ? 1 : 0);
 			i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
 							I2CComm.LEDRGB_SWITCH_ON_OFF, request, parms);
 		} 
