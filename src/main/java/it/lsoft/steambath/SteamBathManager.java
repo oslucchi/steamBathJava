@@ -132,24 +132,22 @@ public class SteamBathManager
 					if (tglFade.isSelected())
 					{
 						request[0] = 1;
-						request[1] = 1;
+						request[1] = 2;
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
 										I2CComm.LEDRGB_FADE_IN_OUT, request, parms);
-						request[1] = 2;
+						request[1] = 1;
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
 										I2CComm.LEDRGB_FADE_IN_OUT, request, parms);
 					}
 					else
 					{
 						request[0] = 0;
-						request[1] = 1;
+						request[1] = 0;
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_RGBSTRIPE, 
 										I2CComm.LEDRGB_FADE_IN_OUT, request, parms);
-						request[1] = 2;
+						request[1] = 0;
 						i2c.prepareCommand(I2CComm.I2C_LIGHTS_AND_STEAM, I2CComm.CTRLID_STARRYSKY, 
 										I2CComm.LEDRGB_FADE_IN_OUT, request, parms);
-//						handleCabinLightsSwitches(tglbtnCabinLights.isSelected());
-//						handleStarrySwitches(tglbtnStarrySky.isSelected());
 					}
 				} 
 				catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
@@ -160,13 +158,6 @@ public class SteamBathManager
 			}
 		});
 		add(tglFade);
-
-//		wb = new JWebBrowser();
-//		wb.setBounds(32, 600, 530, 300);
-//		wb.setBarsVisible(false);
-//		wb.navigate("https://www.youtube.com/watch?v=lE6RYpe9IT0");
-//		wb.setVisible(true);
-//		add(wb);
 
 		tglbtnStarrySky = new JToggleButton("Starry sky");
 		tglbtnStarrySky.setForeground(Color.DARK_GRAY);

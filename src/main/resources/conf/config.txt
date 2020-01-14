@@ -1,16 +1,16 @@
 [starry]
 redMin = 32
-redMax = 255
+redMax = 224
 redSpeed = 1
-redAct = 32
+redAct = 64
 greenMin = 0
 greenMax = 96
-greenSpeed = 4
+greenSpeed = 1
 greenAct = 0
-blueMin = 16
-blueMax = 192
-blueSpeed = 2
-blueAct = 16
+blueMin = 48
+blueMax = 255
+blueSpeed = 1
+blueAct = 96
 redTmrDays = 0
 redTmrHours = 0
 redTmrMins = 0
@@ -20,26 +20,26 @@ greenTmrDays = 0
 greenTmrHours = 0
 greenTmrMins = 0
 greenTmrSecs = 0
-greenTmrTenthMils = 10
+greenTmrTenthMils = 20
 blueTmrDays = 0
 blueTmrHours = 0
 blueTmrMins = 0
 blueTmrSecs = 0
-blueTmrTenthMils = 10
+blueTmrTenthMils = 15
 
 [lights]
-redMin = 32
+redMin = 16
 redMax = 255
 redSpeed = 1
 redAct = 64
-greenMin = 8
+greenMin = 4
 greenMax = 128
 greenSpeed = 1
-greenAct = 8
-blueMin = 24
+greenAct = 4
+blueMin = 8
 blueMax = 192
 blueSpeed = 1
-blueAct = 24
+blueAct = 8
 redTmrDays = 0
 redTmrHours = 0
 redTmrMins = 0
@@ -49,20 +49,20 @@ greenTmrDays = 0
 greenTmrHours = 0
 greenTmrMins = 0
 greenTmrSecs = 0
-greenTmrTenthMils = 10
+greenTmrTenthMils = 20
 blueTmrDays = 0
 blueTmrHours = 0
 blueTmrMins = 0
 blueTmrSecs = 0
-blueTmrTenthMils = 10
+blueTmrTenthMils = 15
 
 [manual]
 starryManRedVal = 164
 starryManGreenVal = 96
 starryManBlueVal = 128
-lightsManRedVal = 64
-lightsManGreenVal = 16
-lightsManBlueVal = 32
+lightsManRedVal = 32
+lightsManGreenVal = 8
+lightsManBlueVal = 48
 
 [steamGen]
 humidity = 3
@@ -70,5 +70,8 @@ temperature = 2
 timer = 1
 
 [fade]
-timerIn = 360
-timerOut = 60
+timerAuto = 150
+timerManual = 30
+minRedVal = 4
+minGreenVal = 2
+minBlueVal = 8

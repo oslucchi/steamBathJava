@@ -7,7 +7,6 @@ import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
 // import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import it.lsoft.steambath.I2CComm;
-import it.lsoft.steambath.MainWindow;
 import it.lsoft.steambath.SteamBathManager;
 import it.lsoft.steambath.SteambathConfiguration;
 import it.lsoft.steambath.Commons.VirtualKeyboard;
@@ -19,28 +18,21 @@ public class Steambath {
 	 */
 	public static void main(String[] args) {
 		JFrame container = new JFrame();
-		// NativeInterface.open();
 		try {
 			EventQueue.invokeLater(new Runnable() {
-				// I2CComm i2c = new I2CComm();
 				I2CComm i2c = null;
 				public void run() {
-					MainWindow mw = null;
 					VirtualKeyboard vk = null;
 					SteambathConfiguration conf = null;
 					SteamBathManager sm = null;
 					Visualizer v;
 					try {
 						i2c = new I2CComm(false);
-//						mw = new MainWindow(i2c);
 						conf = new SteambathConfiguration();
 						sm = new SteamBathManager(i2c);
 						
-						v = new Visualizer(mw, conf, vk, sm);
+						v = new Visualizer(conf, vk, sm);
 						
-//						mw.setVisualizer(v);
-//						mw.setVisible(true);
-//						container.add(mw);
 						conf.setVisualizer(v);
 						conf.setVisible(false);
 						container.add(conf);

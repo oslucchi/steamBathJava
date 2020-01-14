@@ -171,14 +171,26 @@ public class I2CComm {
 			break;
 
 		case LEDRGB_FADE_IN_OUT:
-			len = 4;
+			len = 12;
 			dummyAr = parms.getLightsFadeTimers();
 			command[4] = request[0];
 			command[5] = request[1];
-			command[6] = (byte) ((1 << 6) | (dummyAr[0] >> 1) & 0b00111111) ;
-			command[7] = (byte) ((dummyAr[0] | 0b00000001) << 7); 
-			command[8] = (byte) ((1 << 6) | (dummyAr[1] >> 1) & 0b00111111) ;
-			command[9] = (byte) ((dummyAr[1] | 0b00000001) << 7); 
+			command[6] = (byte) ((1 << 6) | ((int)(dummyAr[0]/60) >> 1) & 0b00111111) ;
+			command[7] = (byte) ((((int)(dummyAr[0]/60) & 0b00000001) << 7) | ((int)(dummyAr[0] % 60) & 0b01111111)); 
+			command[8] = (byte) ((1 << 6) | (((int)dummyAr[1]/60) >> 1) & 0b00111111) ;
+			command[9] = (byte) ((((int)(dummyAr[1]/60) & 0b00000001) << 7) | ((int)(dummyAr[1] % 60) & 0b01111111));
+			if (request[0] == 1)
+			{
+				command[10] = (byte) (parms.getLightsFadeLowerBound()[Parameters.RED]);
+				command[11] = (byte) (parms.getLightsFadeLowerBound()[Parameters.GREEN]);
+				command[12] = (byte) (parms.getLightsFadeLowerBound()[Parameters.BLUE]);
+			}
+			else
+			{
+				command[10] = (byte) dummyArOfAr2[Parameters.RED][Parameters.MIN];
+				command[11] = (byte) dummyArOfAr2[Parameters.GREEN][Parameters.MIN];
+				command[12] = (byte) dummyArOfAr2[Parameters.BLUE][Parameters.MIN];
+			}
 			break;	
 		}
 		command[1] = len;

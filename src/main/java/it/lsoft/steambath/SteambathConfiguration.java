@@ -83,6 +83,11 @@ public class SteambathConfiguration
 	private JTextField lightsRedTmrMilsVal;
 	private JTextField lightsGreenTmrMilsVal;
 	private JTextField lightsBlueTmrMilsVal;
+	private JTextField fadeTmrAuto;
+	private JTextField fadeTmrManual;
+	private JTextField fadeLowerBoundRed;
+	private JTextField fadeLowerBoundGreen;
+	private JTextField fadeLowerBoundBlue;
 	
 	/**
 	 * Create the application.
@@ -116,7 +121,7 @@ public class SteambathConfiguration
 		lblStarrysky.setBackground(Color.WHITE);
 		lblStarrysky.setForeground(Color.DARK_GRAY);
 		lblStarrysky.setFont(new Font("Arsenal", Font.BOLD, 24));
-		lblStarrysky.setBounds(96, 51, 109, 32);
+		lblStarrysky.setBounds(120, 51, 151, 32);
 		add(lblStarrysky);
 		
 		JLabel lblMin = new JLabel("min");
@@ -130,27 +135,27 @@ public class SteambathConfiguration
 		lblMax.setBackground(Color.WHITE);
 		lblMax.setForeground(Color.DARK_GRAY);
 		lblMax.setFont(new Font("Arsenal", Font.BOLD, 16));
-		lblMax.setBounds(12, 259, 35, 15);
+		lblMax.setBounds(12, 259, 51, 15);
 		add(lblMax);
 		
 		JLabel lblSpeed = new JLabel("Speed");
 		lblSpeed.setBackground(Color.WHITE);
 		lblSpeed.setForeground(Color.DARK_GRAY);
 		lblSpeed.setFont(new Font("Arsenal", Font.BOLD, 16));
-		lblSpeed.setBounds(12, 394, 51, 25);
+		lblSpeed.setBounds(12, 394, 72, 25);
 		add(lblSpeed);
 		
 		JLabel lblStarryRed = new JLabel("R");
 		lblStarryRed.setBackground(Color.WHITE);
 		lblStarryRed.setForeground(Color.DARK_GRAY);
 		lblStarryRed.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		lblStarryRed.setBounds(59, 95, 20, 30);
+		lblStarryRed.setBounds(84, 95, 20, 30);
 		add(lblStarryRed);
 
 		JSlider starryRedMin = new JSlider();
 		starryRedMin.setForeground(Color.DARK_GRAY);
 		starryRedMin.setBackground(Color.WHITE);
-		starryRedMin.setBounds(76, 95, 140, 30);
+		starryRedMin.setBounds(101, 95, 140, 30);
 		starryRedMin.setMinimum(0);
 		starryRedMin.setMaximum(255);
 		starryRedMin.setName("starryRedMin");
@@ -161,7 +166,7 @@ public class SteambathConfiguration
 		JSlider starryRedMax = new JSlider();
 		starryRedMax.setForeground(Color.DARK_GRAY);
 		starryRedMax.setBackground(Color.WHITE);
-		starryRedMax.setBounds(77, 223, 140, 30);
+		starryRedMax.setBounds(102, 223, 140, 30);
 		starryRedMax.setMinimum(0);
 		starryRedMax.setMaximum(255);
 		starryRedMax.setName("starryRedMax");
@@ -172,7 +177,7 @@ public class SteambathConfiguration
 		JSlider starryRedSpeed = new JSlider();
 		starryRedSpeed.setForeground(Color.DARK_GRAY);
 		starryRedSpeed.setBackground(Color.WHITE);
-		starryRedSpeed.setBounds(77, 355, 140, 30);
+		starryRedSpeed.setBounds(102, 355, 140, 30);
 		starryRedSpeed.setMinimum(1);
 		starryRedSpeed.setMaximum(5);
 		starryRedSpeed.setName("starryRedSpeed");
@@ -184,13 +189,13 @@ public class SteambathConfiguration
 		lblGreen.setBackground(Color.WHITE);
 		lblGreen.setForeground(Color.DARK_GRAY);
 		lblGreen.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		lblGreen.setBounds(59, 131, 20, 30);
+		lblGreen.setBounds(84, 131, 20, 30);
 		add(lblGreen);
 		
 		JSlider starryGreenMin = new JSlider();
 		starryGreenMin.setForeground(Color.DARK_GRAY);
 		starryGreenMin.setBackground(Color.WHITE);
-		starryGreenMin.setBounds(77, 131, 140, 30);
+		starryGreenMin.setBounds(102, 131, 140, 30);
 		starryGreenMin.setMinimum(0);
 		starryGreenMin.setMaximum(255);
 		starryGreenMin.setName("starryGreenMin");
@@ -201,7 +206,7 @@ public class SteambathConfiguration
 		JSlider starryGreenMax = new JSlider();
 		starryGreenMax.setForeground(Color.DARK_GRAY);
 		starryGreenMax.setBackground(Color.WHITE);
-		starryGreenMax.setBounds(77, 259, 140, 30);
+		starryGreenMax.setBounds(102, 259, 140, 30);
 		starryGreenMax.setMinimum(0);
 		starryGreenMax.setMaximum(255);
 		starryGreenMax.setName("starryGreenMax");
@@ -212,7 +217,7 @@ public class SteambathConfiguration
 		JSlider starryGreenSpeed = new JSlider();
 		starryGreenSpeed.setForeground(Color.DARK_GRAY);
 		starryGreenSpeed.setBackground(Color.WHITE);
-		starryGreenSpeed.setBounds(77, 391, 140, 30);
+		starryGreenSpeed.setBounds(102, 391, 140, 30);
 		starryGreenSpeed.setMinimum(1);
 		starryGreenSpeed.setMaximum(5);
 		starryGreenSpeed.setName("starryGreenSpeed");
@@ -224,13 +229,13 @@ public class SteambathConfiguration
 		lblBlue.setBackground(Color.WHITE);
 		lblBlue.setForeground(Color.DARK_GRAY);
 		lblBlue.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		lblBlue.setBounds(59, 167, 20, 30);
+		lblBlue.setBounds(84, 167, 20, 30);
 		add(lblBlue);
 		
 		JSlider starryBlueMin = new JSlider();
 		starryBlueMin.setForeground(Color.DARK_GRAY);
 		starryBlueMin.setBackground(Color.WHITE);
-		starryBlueMin.setBounds(77, 167, 140, 30);
+		starryBlueMin.setBounds(102, 167, 140, 30);
 		starryBlueMin.setMinimum(0);
 		starryBlueMin.setMaximum(255);
 		starryBlueMin.setName("starryBlueMin");
@@ -241,7 +246,7 @@ public class SteambathConfiguration
 		JSlider starryBlueMax = new JSlider();
 		starryBlueMax.setForeground(Color.DARK_GRAY);
 		starryBlueMax.setBackground(Color.WHITE);
-		starryBlueMax.setBounds(77, 295, 140, 30);
+		starryBlueMax.setBounds(102, 295, 140, 30);
 		starryBlueMax.setMinimum(0);
 		starryBlueMax.setMaximum(255);
 		starryBlueMax.setName("starryBlueMax");
@@ -252,7 +257,7 @@ public class SteambathConfiguration
 		JSlider starryBlueSpeed = new JSlider();
 		starryBlueSpeed.setForeground(Color.DARK_GRAY);
 		starryBlueSpeed.setBackground(Color.WHITE);
-		starryBlueSpeed.setBounds(77, 427, 140, 30);
+		starryBlueSpeed.setBounds(102, 427, 140, 30);
 		starryBlueSpeed.setMinimum(1);
 		starryBlueSpeed.setMaximum(5);
 		starryBlueSpeed.setName("starryBlueSpeed");
@@ -266,7 +271,7 @@ public class SteambathConfiguration
 		starryRedMinVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryRedMinVal.setName("starryRedMinVal");
 		starryRedMinVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		starryRedMinVal.setBounds(218, 93, 40, 34);
+		starryRedMinVal.setBounds(243, 93, 40, 34);
 		starryRedMinVal.setColumns(10);
 		starryRedMinVal.setText(String.valueOf(parms.getStarry()[Parameters.RED][Parameters.MIN]));
 		starryRedMinVal.addActionListener(this);
@@ -280,7 +285,7 @@ public class SteambathConfiguration
 		starryGreenMinVal.setName("starryGreenMinVal");
 		starryGreenMinVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		starryGreenMinVal.setColumns(10);
-		starryGreenMinVal.setBounds(218, 129, 40, 34);
+		starryGreenMinVal.setBounds(243, 129, 40, 34);
 		starryGreenMinVal.setText(String.valueOf(parms.getStarry()[Parameters.GREEN][Parameters.MIN]));
 		starryGreenMinVal.addActionListener(this);
 		starryGreenMinVal.addFocusListener(this);
@@ -293,7 +298,7 @@ public class SteambathConfiguration
 		starryBlueMinVal.setName("starryBlueMinVal");
 		starryBlueMinVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		starryBlueMinVal.setColumns(10);
-		starryBlueMinVal.setBounds(218, 165, 40, 34);
+		starryBlueMinVal.setBounds(243, 165, 40, 34);
 		starryBlueMinVal.setText(String.valueOf(parms.getStarry()[Parameters.BLUE][Parameters.MIN]));
 		starryBlueMinVal.addActionListener(this);
 		starryBlueMinVal.addFocusListener(this);
@@ -306,7 +311,7 @@ public class SteambathConfiguration
 		starryRedMaxVal.setName("starryRedMaxVal");
 		starryRedMaxVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		starryRedMaxVal.setColumns(10);
-		starryRedMaxVal.setBounds(218, 221, 40, 34);
+		starryRedMaxVal.setBounds(243, 221, 40, 34);
 		starryRedMaxVal.setText(String.valueOf(parms.getStarry()[Parameters.RED][Parameters.MAX]));
 		starryRedMaxVal.addActionListener(this);
 		starryRedMaxVal.addFocusListener(this);
@@ -319,7 +324,7 @@ public class SteambathConfiguration
 		starryGreenMaxVal.setName("starryGreenMaxVal");
 		starryGreenMaxVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		starryGreenMaxVal.setColumns(10);
-		starryGreenMaxVal.setBounds(218, 257, 40, 34);
+		starryGreenMaxVal.setBounds(243, 257, 40, 34);
 		starryGreenMaxVal.setText(String.valueOf(parms.getStarry()[Parameters.GREEN][Parameters.MAX]));
 		starryGreenMaxVal.addActionListener(this);
 		starryGreenMaxVal.addFocusListener(this);
@@ -332,7 +337,7 @@ public class SteambathConfiguration
 		starryBlueMaxVal.setName("starryBlueMaxVal");
 		starryBlueMaxVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		starryBlueMaxVal.setColumns(10);
-		starryBlueMaxVal.setBounds(218, 293, 40, 34);
+		starryBlueMaxVal.setBounds(243, 293, 40, 34);
 		starryBlueMaxVal.setText(String.valueOf(parms.getStarry()[Parameters.BLUE][Parameters.MAX]));
 		starryBlueMaxVal.addActionListener(this);
 		starryBlueMaxVal.addFocusListener(this);
@@ -345,7 +350,7 @@ public class SteambathConfiguration
 		starryRedSpeedVal.setName("starryRedSpeedVal");
 		starryRedSpeedVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		starryRedSpeedVal.setColumns(10);
-		starryRedSpeedVal.setBounds(218, 353, 50, 34);
+		starryRedSpeedVal.setBounds(243, 353, 50, 34);
 		starryRedSpeedVal.setText(String.valueOf(parms.getStarry()[Parameters.RED][Parameters.SPEED]));
 		starryRedSpeedVal.addActionListener(this);
 		starryRedSpeedVal.addFocusListener(this);
@@ -358,7 +363,7 @@ public class SteambathConfiguration
 		starryGreenSpeedVal.setName("starryGreenSpeedVal");
 		starryGreenSpeedVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		starryGreenSpeedVal.setColumns(10);
-		starryGreenSpeedVal.setBounds(218, 389, 50, 34);
+		starryGreenSpeedVal.setBounds(243, 389, 50, 34);
 		starryGreenSpeedVal.setText(String.valueOf(parms.getStarry()[Parameters.GREEN][Parameters.SPEED]));
 		starryGreenSpeedVal.addActionListener(this);
 		starryGreenSpeedVal.addFocusListener(this);
@@ -371,7 +376,7 @@ public class SteambathConfiguration
 		starryBlueSpeedVal.setName("starryBlueSpeedVal");
 		starryBlueSpeedVal.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		starryBlueSpeedVal.setColumns(10);
-		starryBlueSpeedVal.setBounds(218, 425, 50, 34);
+		starryBlueSpeedVal.setBounds(243, 425, 50, 34);
 		starryBlueSpeedVal.setText(String.valueOf(parms.getStarry()[Parameters.BLUE][Parameters.SPEED]));
 		starryBlueSpeedVal.addActionListener(this);
 		starryBlueSpeedVal.addFocusListener(this);
@@ -381,7 +386,7 @@ public class SteambathConfiguration
 		lblCabinLights.setBackground(Color.WHITE);
 		lblCabinLights.setForeground(Color.DARK_GRAY);
 		lblCabinLights.setFont(new Font("Arsenal", Font.BOLD, 24));
-		lblCabinLights.setBounds(405, 51, 128, 32);
+		lblCabinLights.setBounds(389, 51, 165, 32);
 		add(lblCabinLights);
 		
 		JSlider lightsRedMin = new JSlider();
@@ -600,58 +605,58 @@ public class SteambathConfiguration
 		lightsBlueSpeedVal.addFocusListener(this);
 		add(lightsBlueSpeedVal);
 				
-		JLabel lblVapor = new JLabel("Steam bath");
+		JLabel lblVapor = new JLabel("Fade timer");
 		lblVapor.setBackground(Color.WHITE);
 		lblVapor.setForeground(Color.DARK_GRAY);
 		lblVapor.setFont(new Font("Arsenal", Font.BOLD, 24));
-		lblVapor.setBounds(233, 653, 140, 32);
+		lblVapor.setBounds(228, 613, 157, 32);
 		add(lblVapor);
 		
 		JLabel lblHumidity = new JLabel("Humidity");
 		lblHumidity.setBackground(Color.WHITE);
 		lblHumidity.setForeground(Color.DARK_GRAY);
 		lblHumidity.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		lblHumidity.setBounds(41, 693, 81, 32);
+		lblHumidity.setBounds(28, 778, 88, 32);
 		add(lblHumidity);
 		
 		JLabel lblTemperature = new JLabel("Temperature");
 		lblTemperature.setBackground(Color.WHITE);
 		lblTemperature.setForeground(Color.DARK_GRAY);
 		lblTemperature.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		lblTemperature.setBounds(220, 693, 99, 32);
+		lblTemperature.setBounds(215, 778, 121, 32);
 		add(lblTemperature);
 		
 		JLabel lblNewLabel = new JLabel("%");
 		lblNewLabel.setBackground(Color.WHITE);
 		lblNewLabel.setForeground(Color.DARK_GRAY);
 		lblNewLabel.setFont(new Font("Arsenal", Font.PLAIN, 12));
-		lblNewLabel.setBounds(180, 700, 35, 15);
+		lblNewLabel.setBounds(175, 785, 35, 15);
 		add(lblNewLabel);
 		
 		JLabel lblC = new JLabel("C°");
 		lblC.setBackground(Color.WHITE);
 		lblC.setForeground(Color.DARK_GRAY);
 		lblC.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblC.setBounds(394, 700, 28, 15);
+		lblC.setBounds(389, 785, 28, 15);
 		add(lblC);
 		
 		JLabel lblTimer = new JLabel("Timer");
 		lblTimer.setBackground(Color.WHITE);
 		lblTimer.setForeground(Color.DARK_GRAY);
 		lblTimer.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		lblTimer.setBounds(445, 693, 51, 32);
+		lblTimer.setBounds(419, 778, 63, 32);
 		add(lblTimer);
 		
 		JLabel lblMin_1 = new JLabel("min");
 		lblMin_1.setBackground(Color.WHITE);
 		lblMin_1.setForeground(Color.DARK_GRAY);
 		lblMin_1.setFont(new Font("Arsenal", Font.PLAIN, 14));
-		lblMin_1.setBounds(544, 700, 35, 15);
+		lblMin_1.setBounds(539, 785, 35, 15);
 		add(lblMin_1);
 		
 		JLabel lblMusic = new JLabel("Music");
 		lblMusic.setFont(new Font("Arsenal", Font.BOLD, 24));
-		lblMusic.setBounds(259, 735, 70, 32);
+		lblMusic.setBounds(255, 830, 81, 32);
 		add(lblMusic);
 		
 		JLabel lblSteamBathConfigration = new JLabel("Steam bath configuration");
@@ -666,7 +671,7 @@ public class SteambathConfiguration
 		timer.setForeground(Color.DARK_GRAY);
 		timer.setBackground(Color.WHITE);
 		timer.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		timer.setBounds(488, 693, 51, 32);
+		timer.setBounds(483, 778, 51, 32);
 		timer.setValue(parms.getHumidity());
 		timer.setName("timer");
 		add(timer);
@@ -675,7 +680,7 @@ public class SteambathConfiguration
 		humidity.setForeground(Color.DARK_GRAY);
 		humidity.setBackground(Color.WHITE);
 		humidity.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		humidity.setBounds(105, 693, 70, 32);
+		humidity.setBounds(119, 778, 51, 32);
 		humidity.setValue(parms.getTemperature());
 		humidity.setName("humidity");
 		add(humidity);
@@ -684,7 +689,7 @@ public class SteambathConfiguration
 		temperature.setForeground(Color.DARK_GRAY);
 		temperature.setBackground(Color.WHITE);
 		temperature.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		temperature.setBounds(320, 693, 70, 32);
+		temperature.setBounds(335, 778, 50, 32);
 		temperature.setValue(parms.getTimer());
 		temperature.setName("temperature");
 		add(temperature);
@@ -746,6 +751,10 @@ public class SteambathConfiguration
 				parms.setHumidity((int)humidity.getValue());
 				parms.setTemperature((int)temperature.getValue());
 				parms.setTimer((int)timer.getValue());
+				
+				parms.setLightsFadeTimers(Parameters.FADETMR_AUTO, fadeTmrAuto.getText());
+				parms.setLightsFadeTimers(Parameters.FADETMR_MANUAL, fadeTmrManual.getText());
+				
 				parms.save();
 				if (keyb != null)
 					keyb.dispose();
@@ -776,42 +785,42 @@ public class SteambathConfiguration
 		label_10.setBackground(Color.WHITE);
 		label_10.setForeground(Color.DARK_GRAY);
 		label_10.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		label_10.setBounds(59, 223, 20, 30);
+		label_10.setBounds(84, 223, 20, 30);
 		add(label_10);
 		
 		JLabel label_11 = new JLabel("G");
 		label_11.setBackground(Color.WHITE);
 		label_11.setForeground(Color.DARK_GRAY);
 		label_11.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		label_11.setBounds(59, 259, 20, 30);
+		label_11.setBounds(84, 259, 20, 30);
 		add(label_11);
 		
 		JLabel label_12 = new JLabel("B");
 		label_12.setBackground(Color.WHITE);
 		label_12.setForeground(Color.DARK_GRAY);
 		label_12.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		label_12.setBounds(59, 295, 20, 30);
+		label_12.setBounds(84, 295, 20, 30);
 		add(label_12);
 		
 		JLabel label_13 = new JLabel("R");
 		label_13.setBackground(Color.WHITE);
 		label_13.setForeground(Color.DARK_GRAY);
 		label_13.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		label_13.setBounds(59, 355, 20, 30);
+		label_13.setBounds(84, 355, 20, 30);
 		add(label_13);
 		
 		JLabel label_14 = new JLabel("G");
 		label_14.setBackground(Color.WHITE);
 		label_14.setForeground(Color.DARK_GRAY);
 		label_14.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		label_14.setBounds(59, 391, 20, 30);
+		label_14.setBounds(84, 391, 20, 30);
 		add(label_14);
 		
 		JLabel label_15 = new JLabel("B");
 		label_15.setBackground(Color.WHITE);
 		label_15.setForeground(Color.DARK_GRAY);
 		label_15.setFont(new Font("Arsenal", Font.PLAIN, 18));
-		label_15.setBounds(59, 427, 20, 30);
+		label_15.setBounds(84, 427, 20, 30);
 		add(label_15);
 		
 		JLabel label_16 = new JLabel("R");
@@ -881,147 +890,147 @@ public class SteambathConfiguration
 		lblTimers.setForeground(Color.DARK_GRAY);
 		lblTimers.setFont(new Font("Arsenal", Font.BOLD, 16));
 		lblTimers.setBackground(Color.WHITE);
-		lblTimers.setBounds(12, 534, 51, 25);
+		lblTimers.setBounds(12, 534, 72, 25);
 		add(lblTimers);
 		
 		JLabel label_1 = new JLabel("R");
 		label_1.setForeground(Color.DARK_GRAY);
 		label_1.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		label_1.setBackground(Color.WHITE);
-		label_1.setBounds(59, 495, 20, 30);
+		label_1.setBounds(84, 495, 20, 30);
 		add(label_1);
 		
 		JLabel label_2 = new JLabel("G");
 		label_2.setForeground(Color.DARK_GRAY);
 		label_2.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		label_2.setBackground(Color.WHITE);
-		label_2.setBounds(59, 531, 20, 30);
+		label_2.setBounds(84, 531, 20, 30);
 		add(label_2);
 		
 		JLabel label_3 = new JLabel("B");
 		label_3.setForeground(Color.DARK_GRAY);
 		label_3.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		label_3.setBackground(Color.WHITE);
-		label_3.setBounds(59, 571, 20, 30);
+		label_3.setBounds(84, 571, 20, 30);
 		add(label_3);
 		
 		starryRedTmrHoursVal = new JTextField();
 		starryRedTmrHoursVal.setHorizontalAlignment(SwingConstants.RIGHT);
-		starryRedTmrHoursVal.setBounds(76, 500, 40, 28);
-		add(starryRedTmrHoursVal);
+		starryRedTmrHoursVal.setBounds(101, 500, 40, 28);
 		starryRedTmrHoursVal.setName("starryRedTmrHours");
 		starryRedTmrHoursVal.setColumns(10);
 		starryRedTmrHoursVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.RED][Parameters.HOURS]));
+		add(starryRedTmrHoursVal);
 		starryRedTmrHoursVal.addActionListener(this);
 		starryRedTmrHoursVal.addFocusListener(this);
 		
 		starryGreenTmrHoursVal = new JTextField();
 		starryGreenTmrHoursVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryGreenTmrHoursVal.setColumns(10);
-		starryGreenTmrHoursVal.setBounds(76, 536, 40, 28);
-		add(starryGreenTmrHoursVal);
+		starryGreenTmrHoursVal.setBounds(101, 536, 40, 28);
 		starryGreenTmrHoursVal.setName("starryGreenTmrHours");
 		starryGreenTmrHoursVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.GREEN][Parameters.HOURS]));
+		add(starryGreenTmrHoursVal);
 		starryGreenTmrHoursVal.addActionListener(this);
 		starryGreenTmrHoursVal.addFocusListener(this);
 		
 		starryBlueTmrHoursVal = new JTextField();
 		starryBlueTmrHoursVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryBlueTmrHoursVal.setColumns(10);
-		starryBlueTmrHoursVal.setBounds(76, 572, 40, 28);
-		add(starryBlueTmrHoursVal);
+		starryBlueTmrHoursVal.setBounds(101, 572, 40, 28);
 		starryBlueTmrHoursVal.setName("starryBlueTmrHours");
 		starryBlueTmrHoursVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.BLUE][Parameters.HOURS]));
+		add(starryBlueTmrHoursVal);
 		starryBlueTmrHoursVal.addActionListener(this);
 		starryBlueTmrHoursVal.addFocusListener(this);
 		
 		starryRedTmrMinsVal = new JTextField();
 		starryRedTmrMinsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryRedTmrMinsVal.setColumns(10);
-		starryRedTmrMinsVal.setBounds(128, 500, 40, 28);
-		add(starryRedTmrMinsVal);
+		starryRedTmrMinsVal.setBounds(153, 500, 40, 28);
 		starryRedTmrMinsVal.setName("starryRedTmrMins");
 		starryRedTmrMinsVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.RED][Parameters.MINS]));
+		add(starryRedTmrMinsVal);
 		starryRedTmrMinsVal.addActionListener(this);
 		starryRedTmrMinsVal.addFocusListener(this);
 		
 		starryGreenTmrMinsVal = new JTextField();
 		starryGreenTmrMinsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryGreenTmrMinsVal.setColumns(10);
-		starryGreenTmrMinsVal.setBounds(128, 536, 40, 28);
-		add(starryGreenTmrMinsVal);
+		starryGreenTmrMinsVal.setBounds(153, 536, 40, 28);
 		starryGreenTmrMinsVal.setName("starryGreenTmrMins");
 		starryGreenTmrMinsVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.GREEN][Parameters.MINS]));
+		add(starryGreenTmrMinsVal);
 		starryGreenTmrMinsVal.addActionListener(this);
 		starryGreenTmrMinsVal.addFocusListener(this);
 		
 		starryBlueTmrMinsVal = new JTextField();
 		starryBlueTmrMinsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryBlueTmrMinsVal.setColumns(10);
-		starryBlueTmrMinsVal.setBounds(128, 572, 40, 28);
-		add(starryBlueTmrMinsVal);
+		starryBlueTmrMinsVal.setBounds(153, 572, 40, 28);
 		starryBlueTmrMinsVal.setName("starryBlueTmrMins");
 		starryBlueTmrMinsVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.BLUE][Parameters.MINS]));
+		add(starryBlueTmrMinsVal);
 		starryBlueTmrMinsVal.addActionListener(this);
 		starryBlueTmrMinsVal.addFocusListener(this);
 		
 		starryRedTmrSecsVal = new JTextField();
 		starryRedTmrSecsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryRedTmrSecsVal.setColumns(10);
-		starryRedTmrSecsVal.setBounds(180, 500, 40, 28);
-		add(starryRedTmrSecsVal);
+		starryRedTmrSecsVal.setBounds(205, 500, 40, 28);
 		starryRedTmrSecsVal.setName("starryRedTmrSecs");
 		starryRedTmrSecsVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.RED][Parameters.SECS]));
+		add(starryRedTmrSecsVal);
 		starryRedTmrSecsVal.addActionListener(this);
 		starryRedTmrSecsVal.addFocusListener(this);
 		
 		starryGreenTmrSecsVal = new JTextField();
 		starryGreenTmrSecsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryGreenTmrSecsVal.setColumns(10);
-		starryGreenTmrSecsVal.setBounds(180, 536, 40, 28);
-		add(starryGreenTmrSecsVal);
+		starryGreenTmrSecsVal.setBounds(205, 536, 40, 28);
 		starryGreenTmrSecsVal.setName("starryGreenTmrSecs");
 		starryGreenTmrSecsVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.GREEN][Parameters.SECS]));
+		add(starryGreenTmrSecsVal);
 		starryGreenTmrSecsVal.addActionListener(this);
 		starryGreenTmrSecsVal.addFocusListener(this);
 		
 		starryBlueTmrSecsVal = new JTextField();
 		starryBlueTmrSecsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryBlueTmrSecsVal.setColumns(10);
-		starryBlueTmrSecsVal.setBounds(180, 572, 40, 28);
-		add(starryBlueTmrSecsVal);
+		starryBlueTmrSecsVal.setBounds(205, 572, 40, 28);
 		starryBlueTmrSecsVal.setName("starryBlueTmrSecs");
 		starryBlueTmrSecsVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.BLUE][Parameters.SECS]));
+		add(starryBlueTmrSecsVal);
 		starryBlueTmrSecsVal.addActionListener(this);
 		starryBlueTmrSecsVal.addFocusListener(this);
 		
 		starryRedTmrMilsVal = new JTextField();
 		starryRedTmrMilsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryRedTmrMilsVal.setColumns(10);
-		starryRedTmrMilsVal.setBounds(233, 500, 40, 28);
-		add(starryRedTmrMilsVal);
+		starryRedTmrMilsVal.setBounds(258, 500, 40, 28);
 		starryRedTmrMilsVal.setName("starryRedTmrMils");
 		starryRedTmrMilsVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.RED][Parameters.TENTH_OF_MILS]));
+		add(starryRedTmrMilsVal);
 		starryRedTmrMilsVal.addActionListener(this);
 		starryRedTmrMilsVal.addFocusListener(this);
 		
 		starryGreenTmrMilsVal = new JTextField();
 		starryGreenTmrMilsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryGreenTmrMilsVal.setColumns(10);
-		starryGreenTmrMilsVal.setBounds(233, 536, 40, 28);
-		add(starryGreenTmrMilsVal);
+		starryGreenTmrMilsVal.setBounds(258, 536, 40, 28);
 		starryGreenTmrMilsVal.setName("starryGreenTmrMils");
 		starryGreenTmrMilsVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.GREEN][Parameters.TENTH_OF_MILS]));
+		add(starryGreenTmrMilsVal);
 		starryGreenTmrMilsVal.addActionListener(this);
 		starryGreenTmrMilsVal.addFocusListener(this);
 		
 		starryBlueTmrMilsVal = new JTextField();
 		starryBlueTmrMilsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		starryBlueTmrMilsVal.setColumns(10);
-		starryBlueTmrMilsVal.setBounds(233, 572, 40, 28);
-		add(starryBlueTmrMilsVal);
+		starryBlueTmrMilsVal.setBounds(258, 572, 40, 28);
 		starryBlueTmrMilsVal.setName("starryBlueTmrMils");
 		starryBlueTmrMilsVal.setText(String.valueOf(parms.getStarryTimers()[Parameters.BLUE][Parameters.TENTH_OF_MILS]));
+		add(starryBlueTmrMilsVal);
 		starryBlueTmrMilsVal.addActionListener(this);
 		starryBlueTmrMilsVal.addFocusListener(this);
 		
@@ -1029,28 +1038,28 @@ public class SteambathConfiguration
 		lblHour.setForeground(Color.DARK_GRAY);
 		lblHour.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		lblHour.setBackground(Color.WHITE);
-		lblHour.setBounds(76, 469, 38, 30);
+		lblHour.setBounds(101, 469, 38, 30);
 		add(lblHour);
 		
 		JLabel lblMins = new JLabel("Mins");
 		lblMins.setForeground(Color.DARK_GRAY);
 		lblMins.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		lblMins.setBackground(Color.WHITE);
-		lblMins.setBounds(128, 469, 38, 30);
+		lblMins.setBounds(153, 469, 38, 30);
 		add(lblMins);
 		
 		JLabel lblSecs = new JLabel("Secs");
 		lblSecs.setForeground(Color.DARK_GRAY);
 		lblSecs.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		lblSecs.setBackground(Color.WHITE);
-		lblSecs.setBounds(182, 469, 38, 30);
+		lblSecs.setBounds(207, 469, 38, 30);
 		add(lblSecs);
 		
 		JLabel lblMills = new JLabel("Mils");
 		lblMills.setForeground(Color.DARK_GRAY);
 		lblMills.setFont(new Font("Arsenal", Font.PLAIN, 18));
 		lblMills.setBackground(Color.WHITE);
-		lblMills.setBounds(235, 471, 38, 30);
+		lblMills.setBounds(260, 471, 38, 30);
 		add(lblMills);
 		
 		JLabel label = new JLabel("R");
@@ -1078,9 +1087,9 @@ public class SteambathConfiguration
 		lightsRedTmrHoursVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsRedTmrHoursVal.setColumns(10);
 		lightsRedTmrHoursVal.setBounds(382, 500, 40, 28);
-		add(lightsRedTmrHoursVal);
 		lightsRedTmrHoursVal.setName("lightsRedTmrHoursVal");
 		lightsRedTmrHoursVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.RED][Parameters.HOURS]));
+		add(lightsRedTmrHoursVal);
 		lightsRedTmrHoursVal.addActionListener(this);
 		lightsRedTmrHoursVal.addFocusListener(this);
 		
@@ -1088,9 +1097,9 @@ public class SteambathConfiguration
 		lightsGreenTmrHoursVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsGreenTmrHoursVal.setColumns(10);
 		lightsGreenTmrHoursVal.setBounds(382, 536, 40, 28);
-		add(lightsGreenTmrHoursVal);
 		lightsGreenTmrHoursVal.setName("lightsGreenTmrHoursVal");
 		lightsGreenTmrHoursVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.GREEN][Parameters.HOURS]));
+		add(lightsGreenTmrHoursVal);
 		lightsGreenTmrHoursVal.addActionListener(this);
 		lightsGreenTmrHoursVal.addFocusListener(this);
 		
@@ -1098,9 +1107,9 @@ public class SteambathConfiguration
 		lightsBlueTmrHoursVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsBlueTmrHoursVal.setColumns(10);
 		lightsBlueTmrHoursVal.setBounds(382, 572, 40, 28);
-		add(lightsBlueTmrHoursVal);
 		lightsBlueTmrHoursVal.setName("lightsBlueTmrHoursVal");
 		lightsBlueTmrHoursVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.BLUE][Parameters.HOURS]));
+		add(lightsBlueTmrHoursVal);
 		lightsBlueTmrHoursVal.addActionListener(this);
 		lightsBlueTmrHoursVal.addFocusListener(this);
 		
@@ -1108,9 +1117,9 @@ public class SteambathConfiguration
 		lightsRedTmrMinsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsRedTmrMinsVal.setColumns(10);
 		lightsRedTmrMinsVal.setBounds(434, 500, 40, 28);
-		add(lightsRedTmrMinsVal);
 		lightsRedTmrMinsVal.setName("lightsRedTmrMinsVal");
 		lightsRedTmrMinsVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.RED][Parameters.MINS]));
+		add(lightsRedTmrMinsVal);
 		lightsRedTmrMinsVal.addActionListener(this);
 		lightsRedTmrMinsVal.addFocusListener(this);
 		
@@ -1118,9 +1127,9 @@ public class SteambathConfiguration
 		lightsGreenTmrMinsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsGreenTmrMinsVal.setColumns(10);
 		lightsGreenTmrMinsVal.setBounds(434, 536, 40, 28);
-		add(lightsGreenTmrMinsVal);
 		lightsGreenTmrMinsVal.setName("lightsGreenTmrMinsVal");
 		lightsGreenTmrMinsVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.GREEN][Parameters.MINS]));
+		add(lightsGreenTmrMinsVal);
 		lightsGreenTmrMinsVal.addActionListener(this);
 		lightsGreenTmrMinsVal.addFocusListener(this);
 		
@@ -1128,9 +1137,9 @@ public class SteambathConfiguration
 		lightsBlueTmrMinsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsBlueTmrMinsVal.setColumns(10);
 		lightsBlueTmrMinsVal.setBounds(434, 572, 40, 28);
-		add(lightsBlueTmrMinsVal);
 		lightsBlueTmrMinsVal.setName("lightsBlueTmrMinsVal");
 		lightsBlueTmrMinsVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.BLUE][Parameters.MINS]));
+		add(lightsBlueTmrMinsVal);
 		lightsBlueTmrMinsVal.addActionListener(this);
 		lightsBlueTmrMinsVal.addFocusListener(this);
 		
@@ -1138,9 +1147,9 @@ public class SteambathConfiguration
 		lightsRedTmrSecsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsRedTmrSecsVal.setColumns(10);
 		lightsRedTmrSecsVal.setBounds(486, 500, 40, 28);
-		add(lightsRedTmrSecsVal);
 		lightsRedTmrSecsVal.setName("lightsRedTmrSecsVal");
 		lightsRedTmrSecsVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.RED][Parameters.SECS]));
+		add(lightsRedTmrSecsVal);
 		lightsRedTmrSecsVal.addActionListener(this);
 		lightsRedTmrSecsVal.addFocusListener(this);
 		
@@ -1148,9 +1157,9 @@ public class SteambathConfiguration
 		lightsGreenTmrSecsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsGreenTmrSecsVal.setColumns(10);
 		lightsGreenTmrSecsVal.setBounds(486, 536, 40, 28);
-		add(lightsGreenTmrSecsVal);
 		lightsGreenTmrSecsVal.setName("lightsGreenTmrSecsVal");
 		lightsGreenTmrSecsVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.GREEN][Parameters.SECS]));
+		add(lightsGreenTmrSecsVal);
 		lightsGreenTmrSecsVal.addActionListener(this);
 		lightsGreenTmrSecsVal.addFocusListener(this);
 		
@@ -1158,9 +1167,9 @@ public class SteambathConfiguration
 		lightsBlueTmrSecsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsBlueTmrSecsVal.setColumns(10);
 		lightsBlueTmrSecsVal.setBounds(486, 572, 40, 28);
-		add(lightsBlueTmrSecsVal);
 		lightsBlueTmrSecsVal.setName("lightsBlueTmrSecsVal");
 		lightsBlueTmrSecsVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.BLUE][Parameters.SECS]));
+		add(lightsBlueTmrSecsVal);
 		lightsBlueTmrSecsVal.addActionListener(this);
 		lightsBlueTmrSecsVal.addFocusListener(this);
 		
@@ -1168,9 +1177,9 @@ public class SteambathConfiguration
 		lightsRedTmrMilsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsRedTmrMilsVal.setColumns(10);
 		lightsRedTmrMilsVal.setBounds(539, 500, 40, 28);
-		add(lightsRedTmrMilsVal);
 		lightsRedTmrMilsVal.setName("lightsRedTmrMilsVal");
 		lightsRedTmrMilsVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.RED][Parameters.TENTH_OF_MILS]));
+		add(lightsRedTmrMilsVal);
 		lightsRedTmrMilsVal.addActionListener(this);
 		lightsRedTmrMilsVal.addFocusListener(this);
 		
@@ -1178,9 +1187,9 @@ public class SteambathConfiguration
 		lightsGreenTmrMilsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsGreenTmrMilsVal.setColumns(10);
 		lightsGreenTmrMilsVal.setBounds(539, 536, 40, 28);
-		add(lightsGreenTmrMilsVal);
 		lightsGreenTmrMilsVal.setName("lightsGreenTmrMilsVal");
 		lightsGreenTmrMilsVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.GREEN][Parameters.TENTH_OF_MILS]));
+		add(lightsGreenTmrMilsVal);
 		lightsGreenTmrMilsVal.addActionListener(this);
 		lightsGreenTmrMilsVal.addFocusListener(this);
 		
@@ -1188,9 +1197,9 @@ public class SteambathConfiguration
 		lightsBlueTmrMilsVal.setHorizontalAlignment(SwingConstants.RIGHT);
 		lightsBlueTmrMilsVal.setColumns(10);
 		lightsBlueTmrMilsVal.setBounds(539, 572, 40, 28);
-		add(lightsBlueTmrMilsVal);
 		lightsBlueTmrMilsVal.setName("lightsBlueTmrMilsVal");
 		lightsBlueTmrMilsVal.setText(String.valueOf(parms.getLightsTimers()[Parameters.BLUE][Parameters.TENTH_OF_MILS]));
+		add(lightsBlueTmrMilsVal);
 		lightsBlueTmrMilsVal.addActionListener(this);
 		lightsBlueTmrMilsVal.addFocusListener(this);
 		
@@ -1221,6 +1230,110 @@ public class SteambathConfiguration
 		label_9.setBackground(Color.WHITE);
 		label_9.setBounds(541, 471, 38, 30);
 		add(label_9);
+		
+		JLabel label_25 = new JLabel("Steam bath");
+		label_25.setForeground(Color.DARK_GRAY);
+		label_25.setFont(new Font("Dialog", Font.BOLD, 24));
+		label_25.setBackground(Color.WHITE);
+		label_25.setBounds(228, 734, 157, 32);
+		add(label_25);
+		
+		JLabel lblAutoOn = new JLabel("Auto on");
+		lblAutoOn.setForeground(Color.DARK_GRAY);
+		lblAutoOn.setFont(new Font("Dialog", Font.PLAIN, 18));
+		lblAutoOn.setBackground(Color.WHITE);
+		lblAutoOn.setBounds(36, 645, 109, 32);
+		add(lblAutoOn);
+		
+		fadeTmrAuto = new JTextField();
+		fadeTmrAuto.setFont(new Font("Dialog", Font.PLAIN, 14));
+		fadeTmrAuto.setText("0");
+		fadeTmrAuto.setName("fadeTmrAuto");
+		fadeTmrAuto.setHorizontalAlignment(SwingConstants.RIGHT);
+		fadeTmrAuto.setColumns(10);
+		fadeTmrAuto.setBounds(147, 646, 58, 34);
+		fadeTmrAuto.setText(String.valueOf(parms.getLightsFadeTimers()[Parameters.FADETMR_AUTO]));
+		fadeTmrAuto.addActionListener(this);
+		fadeTmrAuto.addFocusListener(this);
+		add(fadeTmrAuto);
+		
+		JLabel lblManualOn = new JLabel("Manual on");
+		lblManualOn.setForeground(Color.DARK_GRAY);
+		lblManualOn.setFont(new Font("Dialog", Font.PLAIN, 18));
+		lblManualOn.setBackground(Color.WHITE);
+		lblManualOn.setBounds(36, 689, 109, 32);
+		add(lblManualOn);
+		
+		fadeTmrManual = new JTextField();
+		fadeTmrManual.setText("0");
+		fadeTmrManual.setName("fadeTmrManual");
+		fadeTmrManual.setHorizontalAlignment(SwingConstants.RIGHT);
+		fadeTmrManual.setFont(new Font("Dialog", Font.PLAIN, 14));
+		fadeTmrManual.setColumns(10);
+		fadeTmrManual.setBounds(147, 690, 58, 34);
+		fadeTmrManual.setText(String.valueOf(parms.getLightsFadeTimers()[Parameters.FADETMR_MANUAL]));
+		fadeTmrManual.addFocusListener(this);
+		fadeTmrManual.addActionListener(this);
+		fadeTmrManual.addFocusListener(this);
+		add(fadeTmrManual);
+		
+		fadeLowerBoundRed = new JTextField();
+		fadeLowerBoundRed.setText("4");
+		fadeLowerBoundRed.setName("fadeLowerBoundRed");
+		fadeLowerBoundRed.setHorizontalAlignment(SwingConstants.RIGHT);
+		fadeLowerBoundRed.setColumns(10);
+		fadeLowerBoundRed.setBounds(416, 672, 40, 28);
+		fadeLowerBoundRed.addActionListener(this);
+		fadeLowerBoundRed.addFocusListener(this);
+		add(fadeLowerBoundRed);
+		
+		fadeLowerBoundGreen = new JTextField();
+		fadeLowerBoundGreen.setText("2");
+		fadeLowerBoundGreen.setName("fadeLowerBoundGreen");
+		fadeLowerBoundGreen.setHorizontalAlignment(SwingConstants.RIGHT);
+		fadeLowerBoundGreen.setColumns(10);
+		fadeLowerBoundGreen.setBounds(470, 672, 40, 28);
+		fadeLowerBoundGreen.addActionListener(this);
+		fadeLowerBoundGreen.addFocusListener(this);
+		add(fadeLowerBoundGreen);
+		
+		fadeLowerBoundBlue = new JTextField();
+		fadeLowerBoundBlue.setText("8");
+		fadeLowerBoundBlue.setName("fadeLowerBoundBlue");
+		fadeLowerBoundBlue.setHorizontalAlignment(SwingConstants.RIGHT);
+		fadeLowerBoundBlue.setColumns(10);
+		fadeLowerBoundBlue.setBounds(524, 672, 40, 28);
+		fadeLowerBoundBlue.addActionListener(this);
+		fadeLowerBoundBlue.addFocusListener(this);
+		add(fadeLowerBoundBlue);
+		
+		JLabel label_26 = new JLabel("R");
+		label_26.setForeground(Color.DARK_GRAY);
+		label_26.setFont(new Font("Dialog", Font.PLAIN, 18));
+		label_26.setBackground(Color.WHITE);
+		label_26.setBounds(426, 645, 20, 30);
+		add(label_26);
+		
+		JLabel label_27 = new JLabel("G");
+		label_27.setForeground(Color.DARK_GRAY);
+		label_27.setFont(new Font("Dialog", Font.PLAIN, 18));
+		label_27.setBackground(Color.WHITE);
+		label_27.setBounds(480, 645, 20, 30);
+		add(label_27);
+		
+		JLabel label_28 = new JLabel("B");
+		label_28.setForeground(Color.DARK_GRAY);
+		label_28.setFont(new Font("Dialog", Font.PLAIN, 18));
+		label_28.setBackground(Color.WHITE);
+		label_28.setBounds(534, 645, 20, 30);
+		add(label_28);
+		
+		JLabel lblLowerVal = new JLabel("Lower val");
+		lblLowerVal.setForeground(Color.DARK_GRAY);
+		lblLowerVal.setFont(new Font("Dialog", Font.PLAIN, 18));
+		lblLowerVal.setBackground(Color.WHITE);
+		lblLowerVal.setBounds(308, 670, 109, 32);
+		add(lblLowerVal);
 		
 	}
 	

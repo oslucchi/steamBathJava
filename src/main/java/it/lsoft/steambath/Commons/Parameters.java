@@ -28,6 +28,9 @@ public class Parameters
 	static public final int MINS = 4;
 	static public final int SECS = 5;
 	static public final int TENTH_OF_MILS = 6;
+	static public final int FADETMR_AUTO = 0;
+	static public final int FADETMR_MANUAL = 1;
+	
 	
 	int[][] starry = new int[3][4];
 	int[][] lights = new int[3][4];
@@ -41,6 +44,7 @@ public class Parameters
 	int timer = 30;
 	
 	int[] lightsFadeTimer = new int[2];
+	int[] lightsFadeLowerBound = new int[3];
 	
 	private static Parameters instance = null;
 	private static String confFilePath = null;
@@ -146,14 +150,17 @@ public class Parameters
 		temperature = Integer.parseUnsignedInt(ini.get("steamGen", "temperature"));
 		timer = Integer.parseUnsignedInt(ini.get("steamGen", "timer"));
 		
-		if ((lightsFadeTimer[0] = Integer.parseInt(ini.get("fade", "timerIn"))) > 128*60)
+		if ((lightsFadeTimer[0] = Integer.parseInt(ini.get("fade", "timerAuto"))) > 600)
 		{
-			lightsFadeTimer[0] = 128*60; 
+			lightsFadeTimer[0] = 600; 
 		}
-		if ((lightsFadeTimer[1] = Integer.parseInt(ini.get("fade", "timerOut"))) < 60)
+		if ((lightsFadeTimer[1] = Integer.parseInt(ini.get("fade", "timerManual"))) < 30)
 		{
-			lightsFadeTimer[1] = 60; 
+			lightsFadeTimer[1] = 30; 
 		}
+		lightsFadeLowerBound[RED] = Integer.parseInt(ini.get("fade", "minRedVal"));
+		lightsFadeLowerBound[GREEN] = Integer.parseInt(ini.get("fade", "minGreenVal"));
+		lightsFadeLowerBound[BLUE] = Integer.parseInt(ini.get("fade", "minBlueVal"));
 	}
 
 	public void setTimers()
@@ -183,7 +190,7 @@ public class Parameters
 		{
 			starryTimers[RED][TMR_BYTE_0] = (int) (starryTimers[RED][SECS] & 0b00111110);
 			starryTimers[RED][TMR_BYTE_1] = (int) ((starryTimers[RED][SECS] & 0b00000001) << 7);
-			starryTimers[RED][TMR_BYTE_1] |= ((starryTimers[RED][TENTH_OF_MILS] / 10) & 0b01111111);
+			starryTimers[RED][TMR_BYTE_1] |= (int) (starryTimers[RED][TENTH_OF_MILS] & 0b01111111);
 		}
 
 		if (starryTimers[GREEN][DAYS] != 0)
@@ -211,7 +218,7 @@ public class Parameters
 		{
 			starryTimers[GREEN][TMR_BYTE_0] = (int) (starryTimers[GREEN][SECS] & 0b00111110);
 			starryTimers[GREEN][TMR_BYTE_1] = (int) ((starryTimers[GREEN][SECS] & 0b00000001) << 7);
-			starryTimers[GREEN][TMR_BYTE_1] |= ((starryTimers[GREEN][TENTH_OF_MILS] / 10) & 0b01111111);
+			starryTimers[GREEN][TMR_BYTE_1] |= (int) (starryTimers[GREEN][TENTH_OF_MILS] & 0b01111111);
 		}
 
 		if (starryTimers[BLUE][DAYS] != 0)
@@ -239,7 +246,7 @@ public class Parameters
 		{
 			starryTimers[BLUE][TMR_BYTE_0] = (int) (starryTimers[BLUE][SECS] & 0b00111110);
 			starryTimers[BLUE][TMR_BYTE_1] = (int) ((starryTimers[BLUE][SECS] & 0b00000001) << 7);
-			starryTimers[BLUE][TMR_BYTE_1] |= ((starryTimers[BLUE][TENTH_OF_MILS] / 10) & 0b01111111);
+			starryTimers[BLUE][TMR_BYTE_1] |= (int) (starryTimers[BLUE][TENTH_OF_MILS] & 0b01111111);
 		}
 
 		if (lightsTimers[RED][DAYS] != 0)
@@ -267,7 +274,7 @@ public class Parameters
 		{
 			lightsTimers[RED][TMR_BYTE_0] = (int) (lightsTimers[RED][SECS] & 0b00111110);
 			lightsTimers[RED][TMR_BYTE_1] = (int) ((lightsTimers[RED][SECS] & 0b00000001) << 7);
-			lightsTimers[RED][TMR_BYTE_1] |= (int) ((lightsTimers[RED][TENTH_OF_MILS] / 10) & 0b01111111);
+			lightsTimers[RED][TMR_BYTE_1] |= (int) (lightsTimers[RED][TENTH_OF_MILS] & 0b01111111);
 		}
 
 		if (lightsTimers[GREEN][DAYS] != 0)
@@ -295,7 +302,7 @@ public class Parameters
 		{
 			lightsTimers[GREEN][TMR_BYTE_0] = (int) (lightsTimers[GREEN][SECS] & 0b00111110);
 			lightsTimers[GREEN][TMR_BYTE_1] = (int) ((lightsTimers[GREEN][SECS] & 0b00000001) << 7);
-			lightsTimers[GREEN][TMR_BYTE_1] |= (int) ((lightsTimers[GREEN][TENTH_OF_MILS] / 10) & 0b01111111);
+			lightsTimers[GREEN][TMR_BYTE_1] |= (int) (lightsTimers[GREEN][TENTH_OF_MILS] & 0b01111111);
 		}
 
 		if (lightsTimers[BLUE][DAYS] != 0)
@@ -323,7 +330,7 @@ public class Parameters
 		{
 			lightsTimers[BLUE][TMR_BYTE_0] = (int) (lightsTimers[BLUE][SECS] & 0b00111110);
 			lightsTimers[BLUE][TMR_BYTE_1] = (int) ((lightsTimers[BLUE][SECS] & 0b00000001) << 7);
-			lightsTimers[BLUE][TMR_BYTE_1] |= (int) ((lightsTimers[BLUE][TENTH_OF_MILS] / 10) & 0b01111111);
+			lightsTimers[BLUE][TMR_BYTE_1] |= (int) (lightsTimers[BLUE][TENTH_OF_MILS] & 0b01111111);
 		}
 	}
 	
@@ -499,6 +506,14 @@ public class Parameters
 		ini.put("steamGen", "humidity", humidity);
 		ini.put("steamGen", "temperature", temperature);
 		ini.put("steamGen", "timer", timer);
+		
+		ini.put("fade", "timerAuto", lightsFadeTimer[FADETMR_AUTO]);
+		ini.put("fade", "timerManual", lightsFadeTimer[FADETMR_MANUAL]);
+		
+		ini.put("fade", "minRedVal", lightsFadeLowerBound[RED]);
+		ini.put("fade", "minGreenVal", lightsFadeLowerBound[GREEN]);
+		ini.put("fade", "minBlueVal", lightsFadeLowerBound[BLUE]);
+
 		try 
 		{
 			ini.store(new File(getClass().getResource(confFilePath).getPath()));
@@ -546,6 +561,21 @@ public class Parameters
 
 	public int[] getLightsFadeTimers() {
 		return lightsFadeTimer;
+	}
+	
+	public void setLightsFadeTimers(int selector, String value)
+	{
+		this.lightsFadeTimer[selector] = Integer.valueOf(value);
+	}
+	
+	public int[] getLightsFadeLowerBound()
+	{
+		return lightsFadeLowerBound;
+	}
+	
+	public void setLightsFadeLowerBound(int led, String value)
+	{
+		this.lightsFadeLowerBound[led] = Integer.valueOf(value);
 	}
 	
 }
