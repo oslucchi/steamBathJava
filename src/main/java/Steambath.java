@@ -18,6 +18,7 @@ public class Steambath {
 	 */
 	public static void main(String[] args) {
 		JFrame container = new JFrame();
+		boolean runsInDebugMode = false;
 		try {
 			EventQueue.invokeLater(new Runnable() {
 				I2CComm i2c = null;
@@ -27,7 +28,13 @@ public class Steambath {
 					SteamBathManager sm = null;
 					Visualizer v;
 					try {
-						i2c = new I2CComm(true);
+						try {
+							i2c = new I2CComm(runsInDebugMode);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							System.exit(-1);
+						}
 						conf = new SteambathConfiguration();
 						sm = new SteamBathManager(i2c);
 						

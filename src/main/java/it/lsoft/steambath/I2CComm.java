@@ -263,7 +263,7 @@ public class I2CComm {
     	}
     }
 
-    public I2CComm(boolean debug) throws UnsupportedBusNumberException, IOException, InterruptedException
+    public I2CComm(boolean debug) throws Exception
     {
     	if (!debug)
     	{
@@ -274,9 +274,13 @@ public class I2CComm {
     	else
     	{
     		runsInDebugMode = true;
+	        serial = new SerialHandler("/dev/ttyUSB0");
+	        if (serial.out == null)
+	        {
+	        	throw (new Exception("COMM not working"));
+	        }
 	        starry = null;
 	        lights = null;
-	        serial = new SerialHandler("dev/ttyUSB0");
     	}
     }
     
