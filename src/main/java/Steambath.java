@@ -27,7 +27,7 @@ public class Steambath {
 					SteamBathManager sm = null;
 					Visualizer v;
 					try {
-						i2c = new I2CComm(false);
+						i2c = new I2CComm(true);
 						conf = new SteambathConfiguration();
 						sm = new SteamBathManager(i2c);
 						

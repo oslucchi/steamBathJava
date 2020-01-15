@@ -48,6 +48,8 @@ public class I2CComm {
     
     private byte[] readBuffer = new byte[256];
     private byte[] writeBuffer = new byte[256];
+	private boolean runsInDebugMode = false;
+	private SerialHandler serial;
 
     public boolean prepareCommand(byte deviceId, byte unityId, byte cmdId, byte[] request, Parameters parms) 
     		throws UnsupportedBusNumberException, IOException, InterruptedException
@@ -266,19 +268,19 @@ public class I2CComm {
     	if (!debug)
     	{
 	        I2CBus i2c = I2CFactory.getInstance(I2CBus.BUS_1);
-	
 	        // starry = i2c.getDevice(I2C_LIGHTS_AND_STEAM);
 	        lights = i2c.getDevice(I2C_LIGHTS_AND_STEAM);
-	        
-    	}
+		}
     	else
     	{
+    		runsInDebugMode = true;
 	        starry = null;
 	        lights = null;
+	        serial = new SerialHandler("dev/ttyUSB0");
     	}
     }
     
-    public boolean sendCommand(byte[] cmd) throws UnsupportedBusNumberException, IOException, InterruptedException
+    public boolean sendCommandOnI2C(byte[] cmd) throws UnsupportedBusNumberException, IOException, InterruptedException
     {
         I2CDevice ctrl = null;
 
@@ -364,5 +366,18 @@ public class I2CComm {
     		logger.trace("Response is: '" + msg + "'");
 		}
 		return true;
+    }
+
+    private boolean sendCommandOnSerial(byte[] cmd) throws UnsupportedBusNumberException, IOException, InterruptedException
+    {
+    	return serial.serialWrite(cmd);
+    }
+    
+    public boolean sendCommand(byte[] cmd) throws UnsupportedBusNumberException, IOException, InterruptedException
+    {
+    	if (runsInDebugMode)
+    		return sendCommandOnSerial(cmd);
+    	else
+    		return sendCommandOnI2C(cmd);
     }
 }
