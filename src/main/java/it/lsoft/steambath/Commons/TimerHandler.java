@@ -5,7 +5,13 @@ import java.util.Date;
 
 import javax.swing.JLabel;
 
+import org.apache.log4j.Logger;
+
+import it.lsoft.steambath.I2CComm;
+
 public class TimerHandler extends Thread {
+	final static Logger logger = Logger.getLogger(TimerHandler.class);
+
 	JLabel component;
 	SimpleDateFormat df = new SimpleDateFormat("EEE dd MMM HH:mm:ss");
 	
@@ -24,7 +30,7 @@ public class TimerHandler extends Thread {
 			}
     		catch (InterruptedException e)
     		{
-				e.printStackTrace();
+    			logger.error(e);
 			}
     		this.component.setText(df.format(new Date()));
     	}

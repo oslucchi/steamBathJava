@@ -3,6 +3,8 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
+import org.apache.log4j.Logger;
+
 import com.pi4j.io.i2c.I2CFactory.UnsupportedBusNumberException;
 
 // import chrriis.dj.nativeswing.swtimpl.NativeInterface;
@@ -17,6 +19,7 @@ public class Steambath {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		final Logger logger = Logger.getLogger(SteamBathManager.class);
 		JFrame container = new JFrame();
 		boolean runsInDebugMode = false;
 		try {
@@ -32,7 +35,7 @@ public class Steambath {
 							i2c = new I2CComm(runsInDebugMode);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+				    		logger.error(e);
 							System.exit(-1);
 						}
 						conf = new SteambathConfiguration();
@@ -53,15 +56,17 @@ public class Steambath {
 						container.setFocusable(false);
 						container.setVisible(true);
 					} 
-					catch (UnsupportedBusNumberException | IOException | InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					catch (UnsupportedBusNumberException | IOException | InterruptedException e) 
+					{
+			    		logger.error(e);
 					}
 				}
 			});
-		} catch (Exception e) {
+		} 
+		catch (Exception e)
+		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+    		logger.error(e);
 		}
 		
 		// NativeInterface.runEventPump();

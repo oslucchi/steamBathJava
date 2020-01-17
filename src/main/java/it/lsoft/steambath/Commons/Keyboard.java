@@ -19,6 +19,11 @@ package it.lsoft.steambath.Commons;
 
 import java.awt.AWTException;
 import java.awt.Robot;
+
+import org.apache.log4j.Logger;
+
+import it.lsoft.steambath.I2CComm;
+
 import static java.awt.event.KeyEvent.VK_ALT;
 import static java.awt.event.KeyEvent.VK_CAPS_LOCK;
 import static java.awt.event.KeyEvent.VK_CONTROL;
@@ -32,6 +37,8 @@ import static java.awt.event.KeyEvent.VK_WINDOWS;
  * @author Pankaj
  */
 public class Keyboard {
+	final static Logger logger = Logger.getLogger(Keyboard.class);
+	
     private static boolean IS_NUM_LOCK_ON = false;
     private static boolean IS_CAPS_LOCK_ON = false;
     private static boolean IS_SCROLL_LOCK_ON = false;
@@ -46,7 +53,7 @@ public class Keyboard {
             robot = new Robot();
         }
         catch(AWTException ex) {
-        	ex.printStackTrace();
+        	logger.error(ex);
         }
     }
     

@@ -242,7 +242,7 @@ public class I2CComm {
     	}
     	catch(Exception e)
     	{
-    		e.printStackTrace();
+    		logger.error(e);
     	}
 
     	memset(readBuffer, readBuffer.length, NULL);
@@ -259,7 +259,7 @@ public class I2CComm {
     	}
     	catch(Exception e)
     	{
-    		e.printStackTrace();
+    		logger.error(e);
     	}
     }
 
@@ -311,7 +311,7 @@ public class I2CComm {
 			logger.error(e);
 		}
 
-		Thread.sleep(1000);
+		Thread.sleep(50);
 		int bytesRead = 0;
 		logger.trace("Going to receive message.");
     	boolean pendingHdr = true;
@@ -323,7 +323,7 @@ public class I2CComm {
 	    	}
 	    	catch(IOException e)
 	    	{
-	    		e.printStackTrace();
+	    		logger.error(e);
 	    	}
 
 	    	if (bytesRead < 2)
@@ -352,7 +352,7 @@ public class I2CComm {
 	    			else
 					{
 	    				logger.trace("No answer ready yet, keep pushing");
-	    				Thread.sleep(300);
+	    				Thread.sleep(50);
 					}
 	    			break;
 	    		}

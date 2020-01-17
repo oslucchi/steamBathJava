@@ -95,7 +95,7 @@ public class SteamBathManager
 			myPicture = ImageIO.read(getClass().getResourceAsStream("/images/settings20x20.png"));
 		} 
 		catch (IOException e) {
-			e.printStackTrace();
+    		logger.error(e);
 		}
 		
 		JLabel settingsIcon = new JLabel(new ImageIcon(myPicture));
@@ -153,7 +153,7 @@ public class SteamBathManager
 				catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 				{
 					// TODO implement logger
-					e1.printStackTrace();
+		    		logger.error(e1);
 				}
 			}
 		});
@@ -235,7 +235,7 @@ public class SteamBathManager
 						}
 						catch(UnsupportedBusNumberException | IOException | InterruptedException e1)
 						{
-							e1.printStackTrace();
+				    		logger.error(e1);
 						}
 					}
 				}
@@ -277,7 +277,7 @@ public class SteamBathManager
 					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 					{
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+			    		logger.error(e1);
 					}
 				}
 			}
@@ -310,7 +310,7 @@ public class SteamBathManager
 					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 					{
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+			    		logger.error(e1);
 					}
 				}
 			}
@@ -397,7 +397,7 @@ public class SteamBathManager
 						}
 						catch(UnsupportedBusNumberException | IOException | InterruptedException e1)
 						{
-							e1.printStackTrace();
+				    		logger.error(e1);
 						}
 					}
 				}
@@ -439,7 +439,7 @@ public class SteamBathManager
 					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 					{
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+			    		logger.error(e1);
 					}
 				}
 			}
@@ -472,7 +472,7 @@ public class SteamBathManager
 					catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 					{
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+			    		logger.error(e1);
 					}
 				}
 			}
@@ -596,7 +596,7 @@ public class SteamBathManager
 		catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 		{
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+    		logger.error(e1);
 		}
 	}
 	
@@ -628,7 +628,7 @@ public class SteamBathManager
 		catch (UnsupportedBusNumberException | IOException | InterruptedException e1) 
 		{
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+    		logger.error(e1);
 		}
 	}
 	@Override
